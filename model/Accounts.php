@@ -2,7 +2,7 @@
 include_once 'Utente.php';
 include_once 'Amministratore.php';
 include_once 'UtenteRegistrato.php';
-include_once basename(_DIR_) . '/../Settings.php';
+include_once basename(__DIR__) . '/../Settings.php';
 
 /**
  * Classe Factory
