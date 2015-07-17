@@ -1,8 +1,18 @@
 <?php
-echo "<h1> Benvenuta! :) </h1>
-        <p>kjdshfldsjlfhidsbfkhsfldshfsdnkfbsdbfbdfksdfsdifhdsijfnkdsbfnbsdkbfkjdsbfbdskjfbksdbfbdskjbfksdbkfbkdsbfkbsd sdbfjdskbfkbdsjfbkjsdbfkbdsjbfkds hjbsdkjfbjskbfkbsdjkfbkdsbkjfb jsbfkndskjbfkjdbskfb kdsfkj jusbfijjskdbfkbsdkjfbskd ihsbdfkjbdskjbfkjdsbfjkbsdfkjbdsk ksbdfkjbksjbfkjsdbfkdbsjkf kjbsdkfnkjsdfmdsnf njkbns d,mf kjsdbfks fkjsdbkf sdkjfbsdkjf sdb fkds f,mbdsiubfsd fhgsdbhfdsifbdsuy</p>
-	<p>kjdshfldsjlfhidsbfkhsfldshfsdnkfbsdbfbdfksdfsdifhdsijfnkdsbfnbsdkbfkjdsbfbdskjfbksdbfbdskjbfksdbkfbkdsbfkbsd sdbfjdskbfkbdsjfbkjsdbfkbdsjbfkds hjbsdkjfbjskbfkbsdjkfbkdsbkjfb jsbfkndskjbfkjdbskfb kdsfkj jusbfijjskdbfkbsdkjfbskd ihsbdfkjbdskjbfkjdsbfjkbsdfkjbdsk ksbdfkjbksjbfkjsdbfkdbsjkf kjbsdkfnkjsdfmdsnf njkbns d,mf kjsdbfks fkjsdbkf sdkjfbsdkjf sdb fkds f,mbdsiubfsd fhgsdbhfdsifbdsuy</p>
-	<p>kjdshfldsjlfhidsbfkhsfldshfsdnkfbsdbfbdfksdfsdifhdsijfnkdsbfnbsdkbfkjdsbfbdskjfbksdbfbdskjbfksdbkfbkdsbfkbsd sdbfjdskbfkbdsjfbkjsdbfkbdsjbfkds hjbsdkjfbjskbfkbsdjkfbkdsbkjfb jsbfkndskjbfkjdbskfb kdsfkj jusbfijjskdbfkbsdkjfbskd ihsbdfkjbdskjbfkjdsbfjkbsdfkjbdsk ksbdfkjbksjbfkjsdbfkdbsjkf kjbsdkfnkjsdfmdsnf njkbns d,mf kjsdbfks fkjsdbkf sdkjfbsdkjf sdb fkds f,mbdsiubfsd fhgsdbhfdsifbdsuy</p>
-	<p>kjdshfldsjlfhidsbfkhsfldshfsdnkfbsdbfbdfksdfsdifhdsijfnkdsbfnbsdkbfkjdsbfbdskjfbksdbfbdskjbfksdbkfbkdsbfkbsd sdbfjdskbfkbdsjfbkjsdbfkbdsjbfkds hjbsdkjfbjskbfkbsdjkfbkdsbkjfb jsbfkndskjbfkjdbskfb kdsfkj jusbfijjskdbfkbsdkjfbskd ihsbdfkjbdskjbfkjdsbfjkbsdfkjbdsk ksbdfkjbksjbfkjsdbfkdbsjkf kjbsdkfnkjsdfmdsnf njkbns d,mf kjsdbfks fkjsdbkf sdkjfbsdkjf sdb fkds f,mbdsiubfsd fhgsdbhfdsifbdsuy</p>
-	<p>kjdshfldsjlfhidsbfkhsfldshfsdnkfbsdbfbdfksdfsdifhdsijfnkdsbfnbsdkbfkjdsbfbdskjfbksdbfbdskjbfksdbkfbkdsbfkbsd sdbfjdskbfkbdsjfbkjsdbfkbdsjbfkds hjbsdkjfbjskbfkbsdjkfbkdsbkjfb jsbfkndskjbfkjdbskfb kdsfkj jusbfijjskdbfkbsdkjfbskd ihsbdfkjbdskjbfkjdsbfjkbsdfkjbdsk ksbdfkjbksjbfkjsdbfkdbsjkf kjbsdkfnkjsdfmdsnf njkbns d,mf kjsdbfks fkjsdbkf sdkjfbsdkjf sdb fkds f,mbdsiubfsd fhgsdbhfdsifbdsuy</p>
-	<p>kjdshfldsjlfhidsbfkhsfldshfsdnkfbsdbfbdfksdfsdifhdsijfnkdsbfnbsdkbfkjdsbfbdskjfbksdbfbdskjbfksdbkfbkdsbfkbsd sdbfjdskbfkbdsjfbkjsdbfkbdsjbfkds hjbsdkjfbjskbfkbsdjkfbkdsbkjfb jsbfkndskjbfkjdbskfb kdsfkj jusbfijjskdbfkbsdkjfbskd ihsbdfkjbdskjbfkjdsbfjkbsdfkjbdsk ksbdfkjbksjbfkjsdbfkdbsjkf kjbsdkfnkjsdfmdsnf njkbns d,mf kjsdbfks fkjsdbkf sdkjfbsdkjf sdb fkds f,mbdsiubfsd fhgsdbhfdsifbdsuy</p>";?>
+if($pageContent->getSottoPagina()='register.php')
+{
+        include 'register.php';
+}
+else
+{
+?>
+<h4>Sei tornato? Accedi qui</h4><br><br>
+
+<input type="text" id="Username" name="Username" maxlength="20" value="Username" style="text-align: center"> <br>
+<input type="password" id="Password" name="Password" maxlength="16" value="Password" style="text-align: center"> <br>
+<input type="submit" name="Login" value="Login"> <br>
+<input type="hidden" name="IE" value="IE">
+
+<h4>Altrimenti inserisci i dati e registrati <a href=register.php>QUI</a>, è facile!</h4>
+<?php
+}
