@@ -8,7 +8,6 @@
 class PageContent {
     private $title;
     private $header;
-    private $menu;
     private $sidebar;
     private $content;
     private $errorMessage;
@@ -32,14 +31,6 @@ class PageContent {
 
     public function getHeader() {
         return $this->header;
-    }
-    
-    public function setMenu($menu) {
-        $this->menu = $menu;
-    }
-    
-    public function getMenu() {
-        return $this->menu;
     }
     
     public function setSidebar($sidebar) {
