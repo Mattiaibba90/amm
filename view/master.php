@@ -10,6 +10,9 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 		<title><?= $pageContent->getTitle();?></title>
+                <script type="text/javascript" src="http://spano.sc.unica.it/amm2015/ibbaMattia/lib/jquery-1.9.1.min.js"></script>
+                <script type="text/javascript" src="http://spano.sc.unica.it/amm2015/ibbaMattia/js/Scripts.js"></script>
+                <base href="<?= Settings::getApplicationPath() ?>"/>
 		<meta name="keywords" content="Bijoux all'uncinetto"/>
 		<meta name="description" content="Sito di vendita di gioielli all'uncinetto/>
 		<link rel="shortcut icon" type="image/x-icon" href="gomitolo.gif"/>
@@ -28,14 +31,6 @@
                             ?>
                                     
                     </div>
-                    <div id="menu">
-                                    
-                        <?php
-                        $menu = $pageContent->getMenu();
-                        require $menu;
-                        ?>
-                    </div>
-
 		</div>
 
 		<!-- start page -->
