@@ -46,6 +46,7 @@
         </table>
     </li>
     <li><h3>Aggiungi un bijou in vendita</h3>
+    <form action="admin/home" method="post">
                 <li>
                     <p>Compila il form:</p>
                     <ul class="form_ul">
@@ -80,3 +81,4 @@
                 </li>
             </ul>
             <p><button type="submit" name="cmd" value="vendiBijou">Conferma</button></p>
+            </form>
