@@ -16,6 +16,11 @@ switch ($pageContent->getSubPage()) {
     case 'ricaricaCredito':
         include 'ricaricaCredito.php';
         break;
+        
+    case 'pannelloControllo':
+        include 'pannelloControllo.php';
+        break;
+
 
     default: ?>
             <ul>
