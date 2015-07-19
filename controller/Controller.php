@@ -271,7 +271,7 @@ class Controller {
                 require basename(__DIR__) . '/../view/master.php';
                 break;
             case 1:
-                include_once basename(__DIR__) . '/../view/ajax/register.php';
+                include_once basename(__DIR__) . '/../view/login/register.php';
                 break;
         }
     }
@@ -303,9 +303,9 @@ class Controller {
     protected function showLoginPage($pageContent) {
         //caricamento di tutti i singoli pezzi della pagina
         $pageContent->setTitle("I bijoux filati di Mimi");
-        $pageContent->setHeader(basename(__DIR__) . '/../view/header.php');
-        $pageContent->setSideBar(basename(__DIR__) . '/../view/sidebar.php');
-        $pageContent->setContent(basename(__DIR__) . '/../view/content.php');
+        $pageContent->setHeader(basename(__DIR__) . '/../view/login/header.php');
+        $pageContent->setSideBar(basename(__DIR__) . '/../view/login/sidebar.php');
+        $pageContent->setContent(basename(__DIR__) . '/../view/login/content.php');
     }
 
     /**
