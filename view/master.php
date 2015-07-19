@@ -27,7 +27,7 @@
                                         
                         <?php
                             $header = $pageContent->getHeader();
-                            require $header;
+                            require "$header";
                             ?>
                                     
                     </div>
@@ -39,7 +39,7 @@
                     
                     <?php 
                     $sidebar = $pageContent->getSidebar();
-                    require $sidebar;
+                    require "$sidebar";
                     ?>
                     
                 </div>
@@ -50,7 +50,7 @@
 
                     <?php
                     $content = $pageContent->getContent();
-                    require $content;
+                    require "$content";
                     ?>
 
 		</div>
