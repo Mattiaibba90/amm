@@ -41,7 +41,7 @@ class AdminController extends Controller {
                         $pageContent->setSubPage('credito');
                         break;
                     
-                    //pagina dove poter eseguire tutte le operazioni possibili sui clienti
+                    //pagina dove poter eseguire tutte le operazioni possibili sugli utenti
                     case 'listaUtenti':
                         $mysqli = new mysqli();
                         $mysqli->connect(Settings::$db_host, Settings::$db_user, Settings::$db_password, Settings::$db_name);
@@ -98,17 +98,17 @@ class AdminController extends Controller {
                                         $limiteInferiore = $limiteSuperiore - UtenteController::MAX_RIGHE_TABELLA;
                                     if($limiteInferiore < 0)
                                         $limiteInferiore = 0;
-                                    $query = "SELECT * FROM clienti LIMIT $limiteInferiore, $limiteSuperiore";
+                                    $query = "SELECT * FROM utenti LIMIT $limiteInferiore, $limiteSuperiore";
                                     $result = $mysqli->query($query);
                                     if($mysqli->errno > 0)
                                         error_log("Errore nell'esecuzione della query $mysqli->errno : $mysqli->error");
                                     else{
-                                        $clienti = array();
+                                        $utenti = array();
                                         while($row = $result->fetch_object()){
-                                            $utente = new Utente($row->username, $row->password, $row->nome, $row->cognome, $row->citta, $row->cap, $row->street, $row->streetNumber, $row->creditCard, $row->numeroCartaCredito, $row->email);
+                                            $utente = new Utente($row->username, $row->password, $row->name, $row->surname, $row->city, $row->cap, $row->street, $row->streetNumber, $row->creditCard, $row->creditCardNumber, $row->email);
                                             $utente->setId($row->id);
                                             $utente->ricarica($row->credito, false);
-                                            $clienti[] = $utente;
+                                            $utenti[] = $utente;
                                         }
                                         $mysqli->close();
                                         $pageContent->setSubPage('listaUtenti');
