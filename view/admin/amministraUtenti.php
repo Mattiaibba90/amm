@@ -70,6 +70,7 @@
     <li>
         <h3>Registra un nuovo utente</h3>
             <p>Compila tutti i campi:</p>
+            <form action="admin/home" method="post">
                     <ul class="form_ul">
                         <li>
                             <label for="username">Username:</label>
@@ -138,3 +139,4 @@
                 </li>
             </ul>
         <p><button id="submit-registration">Conferma Registrazione</button></p>
+        </form>
