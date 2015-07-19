@@ -27,7 +27,7 @@
                                         
                         <?php
                             $header = $pageContent->getHeader();
-                            require "$header";
+                            require "login/$header";
                             ?>
                                     
                     </div>
