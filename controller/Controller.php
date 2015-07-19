@@ -168,15 +168,15 @@ class Controller {
                                 $ajaxItem->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
                                 $answer['mail'] = $ajaxItem;
                             }
-                            elseif($this->emailDisponibileCliente($request['mail']) == 1){
+                            elseif($this->emailDisponibileUtente($request['mail']) == 1){
                                 $validi++;
                             }
-                            elseif($this->emailDisponibileCliente($request['mail']) == 0){
+                            elseif($this->emailDisponibileUtente($request['mail']) == 0){
                                 $ajaxItem = new AjaxItem('mail');
                                 $ajaxItem->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
                                 $answer['mail'] = $ajaxItem;
                             }
-                            elseif($this->emailDisponibileCliente($request['mail']) == -1){
+                            elseif($this->emailDisponibileUtente($request['mail']) == -1){
                                 $ajaxItem = new AjaxItem('mail');
                                 $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
                                 $answer['mail'] = $ajaxItem;
@@ -546,11 +546,6 @@ class Controller {
         }
     }
     
-    /**
-     * Consente di registrare un cliente
-     * @param &$request
-     * @param &$message
-     */
     private function registraUtente(&$request, &$message){
         if (filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
             if(filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))){
