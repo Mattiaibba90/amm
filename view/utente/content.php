@@ -1,18 +1,33 @@
 <?php
-if($pageContent->getSubPage()=='register')
-{
-        include 'register.php';
-}
-else
-{
-?>
-<h4>Sei tornato? Accedi qui</h4><br><br>
+switch ($pageContent->getSubPage()) {
+    
+    case 'carrello':
+        include 'carrello.php';
+        break;
 
-<input type="text" id="Username" name="Username" maxlength="20" value="Username" style="text-align: center"> <br>
-<input type="password" id="Password" name="Password" maxlength="16" value="Password" style="text-align: center"> <br>
-<input type="submit" name="Login" value="Login"> <br>
-<input type="hidden" name="IE" value="IE">
+    case 'cronologiaOrdini':
+        include 'cronologiaOrdini.php';
+        break;
+    
+    case 'modificaDati':
+        include 'modificaDati.php';
+        break;
+    
+    case 'ricaricaCredito':
+        include 'ricaricaCredito.php';
+        break;
 
-<h4>Altrimenti inserisci i dati e registrati <a href=ibbaMattia/view/login/register.php>QUI</a>, è facile!</h4>
-<?php
-}
+    default: ?>
+            <ul>
+                <li><h3>Ultimi arrivi</h3>
+                    <ul class="lista_visiva">
+                        <?php 
+                            foreach ($ultimiArrivi as $ultimoArrivo) {
+                                echo '<li><a href="utente/bijou?id_bijou=' . $ultimoArrivo->getId() . '">' . $ultimoArrivo->getNameBijou() . '</a></li>';
+                            }
+                            ?>
+                    </ul>
+                </li>
+            </ul>
+<?php break;}
+                
