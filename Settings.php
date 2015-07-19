@@ -8,9 +8,9 @@ class Settings {
     
     private static $appPath;
     public static $db_host = 'localhost';
-    public static $db_user = 'mattiaibba90';
-    public static $db_password = 'mamaluigi1?';
-    public static $db_name = 'mattiaibba90';
+    public static $db_user = 'ibbaMattia';
+    public static $db_password = 'upupa551';
+    public static $db_name = 'ibbaMattia';
 
     // gestisco il path per l'applicazione, che sia in locale o sul server pubblico
     
