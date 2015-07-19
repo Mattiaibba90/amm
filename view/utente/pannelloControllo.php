@@ -15,7 +15,7 @@
                     <a href="utente/cronologiaOrdini?">Cronologia ordini</a>
                 </li>
                 <li>
-                    <a href="utente/home">Torna alla home</a>
+                    <a href="utente/home?">Torna alla home</a>
                 </li>
                 <li>
                     <form method="post" action="utente/logout">
