@@ -19,7 +19,7 @@ class UtenteController extends Controller {
         $pageContent = new PageContent();
 
         // imposto la pagina
-        $pageContent->setPagina($request['page']);
+        $pageContent->setPage($request['page']);
         $ajaxMode=0;
 
         // gestion dei comandi
@@ -202,20 +202,20 @@ class UtenteController extends Controller {
                     case 'pannelloControlloUtente':
                         $validi=0;
                         $risposta = array();
-                        if(isset($request['nome'])){
-                            if (!filter_var($request['nome'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $oggettoAjax = new OggettoAjax('nome');
-                                $oggettoAjax->setMessaggio('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
-                                $risposta['nome'] = $oggettoAjax;
+                        if(isset($request['name'])){
+                            if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                                $oggettoAjax = new OggettoAjax('name');
+                                $oggettoAjax->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
+                                $risposta['name'] = $oggettoAjax;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['cognome'])){
-                            if (!filter_var($request['cognome'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $oggettoAjax = new OggettoAjax('cognome');
-                                $oggettoAjax->setMessaggio('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
-                                $risposta['cognome'] = $oggettoAjax;
+                        if(isset($request['surname'])){
+                            if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                                $oggettoAjax = new OggettoAjax('surname');
+                                $oggettoAjax->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
+                                $risposta['surname'] = $oggettoAjax;
                             }
                             else
                                 $validi++;
@@ -224,7 +224,7 @@ class UtenteController extends Controller {
                         if(isset($request['mail'])){
                             if (!filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
                                 $oggettoAjax = new OggettoAjax('mail');
-                                $oggettoAjax->setMessaggio('L\'indirizzo e-mail utilizzato non e\' valido');
+                                $oggettoAjax->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
                                 $risposta['mail'] = $oggettoAjax;
                             }
                             elseif($this->emailDisponibileUtente($request['mail'], $user->getId()) == 1){
@@ -232,21 +232,21 @@ class UtenteController extends Controller {
                             }
                             elseif($this->emailDisponibileUtente($request['mail'], $user->getId()) == 0){
                                 $oggettoAjax = new OggettoAjax('mail');
-                                $oggettoAjax->setMessaggio('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
+                                $oggettoAjax->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
                                 $risposta['mail'] = $oggettoAjax;
                             }
                             elseif($this->emailDisponibileUtente($request['mail'], $user->getId()) == -1){
                                 $oggettoAjax = new OggettoAjax('mail');
-                                $oggettoAjax->setMessaggio('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
+                                $oggettoAjax->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
                                 $risposta['mail'] = $oggettoAjax;
                             }
                                
                         }
-                        if(isset($request['citta'])){
-                            if (!filter_var($request['citta'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
-                                $oggettoAjax = new OggettoAjax('citta');
-                                $oggettoAjax->setMessaggio('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
-                                $risposta['citta'] = $oggettoAjax;
+                        if(isset($request['city'])){
+                            if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
+                                $oggettoAjax = new OggettoAjax('city');
+                                $oggettoAjax->setMessage('La città\' non e\' valida, inserisci una città\' con lunghezza compresa fra 3 e 15 lettere');
+                                $risposta['city'] = $oggettoAjax;
                             }
                             else
                                 $validi++;
@@ -254,26 +254,26 @@ class UtenteController extends Controller {
                         if(isset($request['cap'])){
                             if (!filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))) {
                                 $oggettoAjax = new OggettoAjax('cap');
-                                $oggettoAjax->setMessaggio('Il cap non e\' valido, inserisci una cap corretto');
+                                $oggettoAjax->setMessage('Il cap non e\' valido, inserisci una cap corretto');
                                 $risposta['cap'] = $oggettoAjax;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['viaopiazza'])){
-                            if (!filter_var($request['viaopiazza'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
-                                $oggettoAjax = new OggettoAjax('viaopiazza');
-                                $oggettoAjax->setMessaggio('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
-                                $risposta['viaopiazza'] = $oggettoAjax;
+                        if(isset($request['street'])){
+                            if (!filter_var($request['street'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
+                                $oggettoAjax = new OggettoAjax('street');
+                                $oggettoAjax->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
+                                $risposta['street'] = $oggettoAjax;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['numeroCivico'])){
-                            if (!filter_var($request['numeroCivico'], FILTER_VALIDATE_INT)) {
-                                $oggettoAjax = new OggettoAjax('numeroCivico');
-                                $oggettoAjax->setMessaggio('Il numero civico non puo\' contenere lettere');
-                                $risposta['numeroCivico'] = $oggettoAjax;
+                        if(isset($request['streetNumber'])){
+                            if (!filter_var($request['streetNumber'], FILTER_VALIDATE_INT)) {
+                                $oggettoAjax = new OggettoAjax('streetNumber');
+                                $oggettoAjax->setMessage('Il numero civico non puo\' contenere lettere');
+                                $risposta['streetNumber'] = $oggettoAjax;
                             }
                             else
                                 $validi++;
@@ -372,7 +372,7 @@ class UtenteController extends Controller {
                 require basename(__DIR__) . '/../view/master.php';
                 break;
             case 1:
-                include_once basename(__DIR__) . '/../view/ajax/registrazione.php';
+                include_once basename(__DIR__) . '/../view/login/registrazione.php';
                 break;
         }
     }
@@ -407,7 +407,7 @@ class UtenteController extends Controller {
      */
     private function pannelloControlloUtente(&$user, &$request, &$message){
         $validMail = filter_var($request['mail'], FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
-        $validNumeroCivico = filter_var($request['numeroCivico'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+        $validNumeroCivico = filter_var($request['streetNumber'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
         $controlloCAP = true;
         if (!filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/'))))
                 $controlloCAP = null;
@@ -442,7 +442,7 @@ class UtenteController extends Controller {
                         $stmt = $mysqli->stmt_init();
                         $query = "UPDATE utenti SET name=? , surname=? , city=? , street=? , streetNumber=?, cap=?, mail=?  WHERE id=?";
                         $stmt->prepare($query);
-                        $stmt->bind_param("ssssiisi", $request['nome'], $request['cognome'], $request['citta'], $request['viaopiazza'], $request['numeroCivico'], $request['cap'], $request['mail'], $user->getId());
+                        $stmt->bind_param("ssssiisi", $request['name'], $request['surname'], $request['city'], $request['street'], $request['streetNumber'], $request['cap'], $request['mail'], $user->getId());
                         $stmt->execute();
                         if($stmt->errno > 0){
                             error_log("Errore nell'esecuzione della query $stmt->errno : $stmt->error");
@@ -451,17 +451,17 @@ class UtenteController extends Controller {
                         }
                         else{
                             $mysqli->close();
-                            $user->setName($request['nome']);
-                            $user->setSurname($request['cognome']);
+                            $user->setName($request['name']);
+                            $user->setSurname($request['surname']);
                             if(!$user->setEmail($request['mail'])){
                                 $message[] = '<li>L\'email specificata non &egrave; nel formato corretto</li>';
                             }
-                            $user->setCity($request['citta']);
+                            $user->setCity($request['city']);
                             if(!$user->setCap($request['cap'])){
                                 $message[] = '<li>Il CAP specificato non &egrave; nel formato corretto</li>';
                             }
-                            $user->setStreet($request['viaopiazza']);
-                            if(!$user->setStreetNumber($request['numeroCivico'])){
+                            $user->setStreet($request['street']);
+                            if(!$user->setStreetNumber($request['streetNumber'])){
                                 $message[] = '<li>Il Numero Civico specificato non &egrave; nel formato corretto</li>';
                             }
                         }
@@ -556,7 +556,7 @@ class UtenteController extends Controller {
                 $message[] = "<li>La quantita di qualche elemento nel tuo carrello non e' piu' disponibile, si prega di effettuare il logout e di rieffettuare il login</li>";
         }
         else
-            $message[] = '<li>Non hai credito sufficiente per confermare l\'ordine, ti preghiamo di <a href="cliente/ricaricaCredito">ricaricare</a></li>';
+            $message[] = '<li>Non hai credito sufficiente per confermare l\'ordine, ti preghiamo di <a href="utente/ricaricaCredito">ricaricare</a></li>';
     }
     
     protected function emailDisponibileUtente($email, $userID){
