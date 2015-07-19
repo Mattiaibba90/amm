@@ -16,7 +16,7 @@
 		<meta name="keywords" content="Bijoux all'uncinetto"/>
 		<meta name="description" content="Sito di vendita di gioielli all'uncinetto/>
 		<link rel="shortcut icon" type="image/x-icon" href="gomitolo.gif"/>
-		<link href="../css/Bijou.css" rel="stylesheet" type="text/css" media="screen"/>
+		<link href="http://spano.sc.unica.it/amm2015/ibbaMattia/css/Bijou.css" rel="stylesheet" type="text/css" media="screen"/>
 		<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 	</head>
 
