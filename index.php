@@ -13,7 +13,7 @@ class MainController {
     public static function dispatch(&$request) {
         //inizializzazione della sessione
         session_start();
-        $request["page"] = 'login';
+        //$request["page"] = 'login';
         if(isset($request["page"])) {
             switch ($request["page"]) {
                 case "login":
