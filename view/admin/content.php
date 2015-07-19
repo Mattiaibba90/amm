@@ -6,10 +6,16 @@
                     <a href="admin/amministraUtenti?">Amministra utenti</a>
                 </li>
                 <li>
+                    <a href="admin/modificaUtenti?">Modifica utenti</a>
+                </li>
+                <li>
                     <a href="admin/ricaricaUtenti?">Ricarica utenti</a>
                 </li>
                 <li>
                     <a href="admin/amministraBijoux?">Amministra bijoux</a>
+                </li>
+                <li>
+                    <a href="admin/modificaBijoux?">Modifica bijoux</a>
                 </li>
                 <li>
                     <a href="admin/home?">Mostra home</a>
