@@ -105,7 +105,7 @@ class AdminController extends Controller {
                                     else{
                                         $clienti = array();
                                         while($row = $result->fetch_object()){
-                                            $utente = new Utente($row->username, $row->password, $row->nome, $row->cognome, $row->citta, $row->cap, $row->viaOPiazza, $row->numeroCivico, $row->marcaCartaCredito, $row->numeroCartaCredito, $row->email);
+                                            $utente = new Utente($row->username, $row->password, $row->nome, $row->cognome, $row->citta, $row->cap, $row->street, $row->streetNumber, $row->creditCard, $row->numeroCartaCredito, $row->email);
                                             $utente->setId($row->id);
                                             $utente->ricarica($row->credito, false);
                                             $clienti[] = $utente;
@@ -116,7 +116,7 @@ class AdminController extends Controller {
                                 }
                                 else{
                                     $message = array();
-                                    $message[] = "<li>Non sono presenti clienti registrati sul sito!</li>";
+                                    $message[] = "<li>Non sono presenti utenti registrati sul sito</li>";
                                     $this->creaFeedbackUtente($message, $pageContent, "");
                                 }
                             }
@@ -367,7 +367,7 @@ class AdminController extends Controller {
 
                         $message = array();
                         $this->modificaUtente($user, $request, $message);
-                        $this->creaFeedbackUtente($message, $pageContent, "Informazioni del cliente aggiornate con successo!");
+                        $this->creaFeedbackUtente($message, $pageContent, "Informazioni dell'utente aggiornate con successo!");
                         $this->showHomeUtente($pageContent);
                         break;
                     
@@ -379,7 +379,7 @@ class AdminController extends Controller {
                         if(isset($request['username'])){
                             if (!filter_var($request['username'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z0-9]{5,10}/')))) {
                                 $ajaxItem = new ajaxItem('username');
-                                $ajaxItem->setMessaggio('L\'username non e\' valido, inserisci un username con lunghezza compresa fra 5 e 10 caratteri (non simboli)');
+                                $ajaxItem->setMessage('L\'username non e\' valido, inserisci un username con lunghezza compresa fra 5 e 10 caratteri (non simboli)');
                                 $answer['username'] = $ajaxItem;
                             }
                             elseif($this->usernameDisponibile($request['username']) == 1){
@@ -387,12 +387,12 @@ class AdminController extends Controller {
                             }
                             elseif($this->usernameDisponibile($request['username']) == 0){
                                 $ajaxItem = new ajaxItem('username');
-                                $ajaxItem->setMessaggio('Questo username non e\' disponibile, scegline un altro');
+                                $ajaxItem->setMessage('Questo username non e\' disponibile, scegline un altro');
                                 $answer['username'] = $ajaxItem;
                             }
                             elseif($this->usernameDisponibile($request['username']) == -1){
                                 $ajaxItem = new AjaxItem('username');
-                                $ajaxItem->setMessaggio('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
+                                $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
                                 $answer['username'] = $ajaxItem;
                             }
                             
@@ -400,26 +400,26 @@ class AdminController extends Controller {
                         if(isset($request['password'])){
                             if (!filter_var($request['password'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z0-9]{7,14}/')))) {
                                 $ajaxItem = new AjaxItem('password');
-                                $ajaxItem->setMessaggio('La password non e\' valida, inserisci una password con lunghezza compresa fra 7 e 14 caratteri (non simboli)');
+                                $ajaxItem->setMessage('La password non e\' valida, inserisci una password con lunghezza compresa fra 7 e 14 caratteri (non simboli)');
                                 $answer['password'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['nome'])){
-                            if (!filter_var($request['nome'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $ajaxItem = new AjaxItem('nome');
-                                $ajaxItem->setMessaggio('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
-                                $answer['nome'] = $ajaxItem;
+                        if(isset($request['name'])){
+                            if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                                $ajaxItem = new AjaxItem('name');
+                                $ajaxItem->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
+                                $answer['name'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['cognome'])){
-                            if (!filter_var($request['cognome'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $ajaxItem = new AjaxItem('cognome');
-                                $ajaxItem->setMessaggio('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
-                                $answer['cognome'] = $ajaxItem;
+                        if(isset($request['surname'])){
+                            if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                                $ajaxItem = new AjaxItem('surname');
+                                $ajaxItem->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
+                                $answer['surname'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -428,29 +428,29 @@ class AdminController extends Controller {
                         if(isset($request['mail'])){
                             if (!filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
                                 $ajaxItem = new AjaxItem('mail');
-                                $ajaxItem->setMessaggio('L\'indirizzo e-mail utilizzato non e\' valido');
+                                $ajaxItem->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
                                 $answer['mail'] = $ajaxItem;
                             }
-                            elseif($this->emailDisponibileCliente($request['mail']) == 1){
+                            elseif($this->emailDisponibileUtente($request['mail']) == 1){
                                 $validi++;
                             }
-                            elseif($this->emailDisponibileCliente($request['mail']) == 0){
+                            elseif($this->emailDisponibileUtente($request['mail']) == 0){
                                 $ajaxItem = new AjaxItem('mail');
-                                $ajaxItem->setMessaggio('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
+                                $ajaxItem->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
                                 $answer['mail'] = $ajaxItem;
                             }
-                            elseif($this->emailDisponibileCliente($request['mail']) == -1){
+                            elseif($this->emailDisponibileUtente($request['mail']) == -1){
                                 $ajaxItem = new AjaxItem('mail');
-                                $ajaxItem->setMessaggio('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
+                                $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
                                 $answer['mail'] = $ajaxItem;
                             }
                                
                         }
-                        if(isset($request['marcaCartaCredito'])){
-                            if (!filter_var($request['marcaCartaCredito'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,15}/')))) {
-                                $ajaxItem = new AjaxItem('marcaCartaCredito');
-                                $ajaxItem->setMessaggio('Inserisci una marca con lunghezza compresa fra 5 e 15 lettere');
-                                $answer['marcaCartaCredito'] = $ajaxItem;
+                        if(isset($request['creditCard'])){
+                            if (!filter_var($request['creditCard'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,15}/')))) {
+                                $ajaxItem = new AjaxItem('creditCard');
+                                $ajaxItem->setMessage('Inserisci una marca con lunghezza compresa fra 5 e 15 lettere');
+                                $answer['creditCard'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -458,17 +458,17 @@ class AdminController extends Controller {
                         if(isset($request['creditCardNumber'])){
                             if (!filter_var($request['creditCardNumber'], FILTER_VALIDATE_INT)) {
                                 $ajaxItem = new AjaxItem('creditCardNumber');
-                                $ajaxItem->setMessaggio('Il numero della carta di credito non e\' valido');
+                                $ajaxItem->setMessage('Il numero della carta di credito non e\' valido');
                                 $answer['creditCardNumber'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['citta'])){
-                            if (!filter_var($request['citta'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
-                                $ajaxItem = new AjaxItem('citta');
-                                $ajaxItem->setMessaggio('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
-                                $answer['citta'] = $ajaxItem;
+                        if(isset($request['city'])){
+                            if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
+                                $ajaxItem = new AjaxItem('city');
+                                $ajaxItem->setMessage('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
+                                $answer['city'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -476,17 +476,17 @@ class AdminController extends Controller {
                         if(isset($request['cap'])){
                             if (!filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))) {
                                 $ajaxItem = new AjaxItem('cap');
-                                $ajaxItem->setMessaggio('Il cap non e\' valido, inserisci una cap corretto');
+                                $ajaxItem->setMessage('Il cap non e\' valido, inserisci una cap corretto');
                                 $answer['cap'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['viaopiazza'])){
-                            if (!filter_var($request['viaopiazza'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
-                                $ajaxItem = new AjaxItem('viaopiazza');
-                                $ajaxItem->setMessaggio('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
-                                $answer['viaopiazza'] = $ajaxItem;
+                        if(isset($request['street'])){
+                            if (!filter_var($request['street'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
+                                $ajaxItem = new AjaxItem('street');
+                                $ajaxItem->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
+                                $answer['street'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -494,7 +494,7 @@ class AdminController extends Controller {
                         if(isset($request['streetNumber'])){
                             if (!filter_var($request['streetNumber'], FILTER_VALIDATE_INT)) {
                                 $ajaxItem = new AjaxItem('streetNumber');
-                                $ajaxItem->setMessaggio('Il numero civico non puo\' contenere lettere');
+                                $ajaxItem->setMessage('Il numero civico non puo\' contenere lettere');
                                 $answer['streetNumber'] = $ajaxItem;
                             }
                             else
@@ -504,7 +504,7 @@ class AdminController extends Controller {
                         if($validi == 11){
                             $message = array();
                             $this->registraUtente($request, $message);
-                            $this->creaFeedbackUtente($message, $pageContent, "Cliente registrato con successo!");
+                            $this->creaFeedbackUtente($message, $pageContent, "Utente registrato con successo!");
                             $this->creaFeedbackUtente($message, $pageContent, "Puoi gia' da ora accedere con le tue credenziali");
                             $this->showLoginPage($pageContent);
                         }
@@ -552,7 +552,7 @@ class AdminController extends Controller {
             else{
                 // nessun comando
                 $user = $session['user'];
-                $ultimiArrivi = BaseController::loadUltimiArrivi();
+                $ultimiArrivi = Controller::loadUltimiArrivi();
                 $this->showHomeUtente($pageContent);
             }//end else
         }
@@ -562,7 +562,7 @@ class AdminController extends Controller {
                 require basename(__DIR__) . '/../view/master.php';
                 break;
             case 1:
-                include_once basename(__DIR__) . '/../view/ajax/registrazione.php';
+                include_once basename(__DIR__) . '/../view/login/registrazione.php';
                 break;
         }
     }
@@ -596,11 +596,11 @@ class AdminController extends Controller {
     private function modificaUtente(&$user, &$request, &$message){
         if (filter_var($request['mail_mod'], FILTER_VALIDATE_EMAIL)) {
             if(filter_var($request['cap_mod'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))){
-                $intNumeroCivico_mod = filter_var($request['numeroCivico_mod'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                $intNumeroCivico_mod = filter_var($request['streetNumber_mod'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                 if(isset($intNumeroCivico_mod)){
-                    $idUtente = filter_var($request['clienteSelezionato'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                    $idUtente = filter_var($request['utenteSelezionato'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                     if(isset($idUtente)){
-                        $errore = $user->modificaUtente($idUtente, $request['username_mod'], $request['password_mod'], $request['nome_mod'], $request['cognome_mod'], $request['citta_mod'], $request['viaopiazza_mod'], $intNumeroCivico_mod, $request['mail_mod'], $request['cap_mod']);
+                        $errore = $user->modificaUtente($idUtente, $request['username_mod'], $request['password_mod'], $request['name_mod'], $request['surname_mod'], $request['city_mod'], $request['street_mod'], $intNumeroCivico_mod, $request['mail_mod'], $request['cap_mod']);
                           if(isset($errore))
                              $message[] = $errore;
                     }
@@ -854,7 +854,7 @@ private function registraUtente(&$request, &$message){
                             }
                             else{
                                 $mysqli->close();
-                                $message[] = "<li>L\'id del cliente selezionato non corrisponde a nessun utente registrato sul sito</li>";
+                                $message[] = "<li>L\'id dell'utente selezionato non corrisponde a nessun utente registrato sul sito</li>";
                             }     
                         }
                     }
