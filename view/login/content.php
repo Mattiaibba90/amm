@@ -1,5 +1,5 @@
 <?php
-if($pageContent->getSottoPagina()=='register')
+if($pageContent->getSubPage()=='register')
 {
         include 'register.php';
 }
