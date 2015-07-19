@@ -146,7 +146,7 @@ class Controller {
                         if(isset($request['name'])){
                             if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
                                 $ajaxItem = new AjaxItem('name');
-                                $ajaxItem->setMessage('Il name non e\' valido, inserisci un name con lunghezza compresa fra 3 e 10 lettere');
+                                $ajaxItem->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
                                 $answer['name'] = $ajaxItem;
                             }
                             else
@@ -155,7 +155,7 @@ class Controller {
                         if(isset($request['surname'])){
                             if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
                                 $ajaxItem = new AjaxItem('surname');
-                                $ajaxItem->setMessage('Il surname non e\' valido, inserisci un surname con lunghezza compresa fra 3 e 10 lettere');
+                                $ajaxItem->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
                                 $answer['surname'] = $ajaxItem;
                             }
                             else
@@ -202,9 +202,9 @@ class Controller {
                                 $validi++;
                         }
                         if(isset($request['city'])){
-                            if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
+                            if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,20}/')))) {
                                 $ajaxItem = new AjaxItem('city');
-                                $ajaxItem->setMessage('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
+                                $ajaxItem->setMessage('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 20 lettere');
                                 $answer['city'] = $ajaxItem;
                             }
                             else
@@ -271,7 +271,7 @@ class Controller {
                 require basename(__DIR__) . '/../view/master.php';
                 break;
             case 1:
-                include_once basename(__DIR__) . '/../view/ajax/register.php';
+                include_once basename(__DIR__) . '/../view/login/register.php';
                 break;
         }
     }
@@ -536,7 +536,7 @@ class Controller {
                         $return['limiteInferiore'] = $limiteInferiore;
                         $return['limiteSuperiore'] = $limiteSuperiore;
                         $return['cursore'] = $intCursore;
-                        $return['pattern'] = $request['ricerca_libro'];
+                        $return['pattern'] = $request['ricerca_bijou'];
                         return $return;
                     }//end else
                }
