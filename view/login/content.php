@@ -13,6 +13,6 @@ else
 <input type="submit" name="Login" value="Login"> <br>
 <input type="hidden" name="IE" value="IE">
 
-<h4>Altrimenti inserisci i dati e registrati <a href=register.php>QUI</a>, è facile!</h4>
+<h4>Altrimenti inserisci i dati e registrati <a href=ibbaMattia/view/login/register.php>QUI</a>, è facile!</h4>
 <?php
 }
