@@ -143,20 +143,20 @@ class Controller {
                             else
                                 $validi++;
                         }
-                        if(isset($request['nome'])){
-                            if (!filter_var($request['nome'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $ajaxItem = new AjaxItem('nome');
-                                $ajaxItem->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
-                                $answer['nome'] = $ajaxItem;
+                        if(isset($request['name'])){
+                            if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                                $ajaxItem = new AjaxItem('name');
+                                $ajaxItem->setMessage('Il name non e\' valido, inserisci un name con lunghezza compresa fra 3 e 10 lettere');
+                                $answer['name'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
-                        if(isset($request['cognome'])){
-                            if (!filter_var($request['cognome'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $ajaxItem = new AjaxItem('cognome');
-                                $ajaxItem->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
-                                $answer['cognome'] = $ajaxItem;
+                        if(isset($request['surname'])){
+                            if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                                $ajaxItem = new AjaxItem('surname');
+                                $ajaxItem->setMessage('Il surname non e\' valido, inserisci un surname con lunghezza compresa fra 3 e 10 lettere');
+                                $answer['surname'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -183,11 +183,11 @@ class Controller {
                             }
                                
                         }
-                        if(isset($request['marcaCartaCredito'])){
-                            if (!filter_var($request['marcaCartaCredito'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{4,15}/')))) {
-                                $ajaxItem = new AjaxItem('marcaCartaCredito');
+                        if(isset($request['creditCard'])){
+                            if (!filter_var($request['creditCard'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{4,15}/')))) {
+                                $ajaxItem = new AjaxItem('creditCard');
                                 $ajaxItem->setMessage('Inserisci una marca con lunghezza compresa fra 4 e 15 lettere');
-                                $answer['marcaCartaCredito'] = $ajaxItem;
+                                $answer['creditCard'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -201,11 +201,11 @@ class Controller {
                             else
                                 $validi++;
                         }
-                        if(isset($request['citta'])){
-                            if (!filter_var($request['citta'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
-                                $ajaxItem = new AjaxItem('citta');
+                        if(isset($request['city'])){
+                            if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
+                                $ajaxItem = new AjaxItem('city');
                                 $ajaxItem->setMessage('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
-                                $answer['citta'] = $ajaxItem;
+                                $answer['city'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -219,11 +219,11 @@ class Controller {
                             else
                                 $validi++;
                         }
-                        if(isset($request['viaopiazza'])){
-                            if (!filter_var($request['viaopiazza'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
-                                $ajaxItem = new AjaxItem('viaopiazza');
+                        if(isset($request['street'])){
+                            if (!filter_var($request['street'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
+                                $ajaxItem = new AjaxItem('street');
                                 $ajaxItem->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
-                                $answer['viaopiazza'] = $ajaxItem;
+                                $answer['street'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -315,9 +315,9 @@ class Controller {
     protected function showHomeUtente($pageContent) {
         //caricamento di tutti i singoli pezzi della pagina
         $pageContent->setTitle("I bijoux filati di Mimi");
-        $pageContent->setHeader(basename(__DIR__) . '/../view/header.php');
-        $pageContent->setSideBar(basename(__DIR__) . '/../view/sidebar.php');
-        $pageContent->setContent(basename(__DIR__) . '/../view/content.php');
+        $pageContent->setHeader(basename(__DIR__) . '/../view/utente/header.php');
+        $pageContent->setSideBar(basename(__DIR__) . '/../view/utente/sidebar.php');
+        $pageContent->setContent(basename(__DIR__) . '/../view/utente/content.php');
     }
 
      /**
@@ -326,9 +326,9 @@ class Controller {
     protected function showHomeAdmin($pageContent) {
         //caricamento di tutti i singoli pezzi della pagina
         $pageContent->setTitle("I bijoux filati di Mimi");
-        $pageContent->setHeader(basename(__DIR__) . '/../view/header.php');
-        $pageContent->setSideBar(basename(__DIR__) . '/../view/sidebar.php');
-        $pageContent->setContent(basename(__DIR__) . '/../view/content.php');
+        $pageContent->setHeader(basename(__DIR__) . '/../view/admin/header.php');
+        $pageContent->setSideBar(basename(__DIR__) . '/../view/admin/sidebar.php');
+        $pageContent->setContent(basename(__DIR__) . '/../view/admin/content.php');
     }
 
      /**
@@ -359,7 +359,7 @@ class Controller {
             $this->showHomeUtente($pageContent);
         }//end if
         else{
-            $pageContent->setErrorMessage("Utente sconosciuto o password errata");
+            $pageContent->setErrorMessage("Username o password errati");
             $this->showLoginPage($pageContent);
         }//end else
     }
