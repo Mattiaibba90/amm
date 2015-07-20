@@ -5,6 +5,12 @@ if($pageContent->getSubPage()=='register')
 }
 else
 {
+    if($pageContent->getSubPage()=='risultatiRicercaAvanzata')
+    {
+        include 'risultatiRicercaAvanzata.php';
+    }
+    else
+{
 ?>
 <h4>Sei tornato? Accedi qui</h4><br><br>
 
@@ -15,4 +21,5 @@ else
 
 <h4>Altrimenti inserisci i dati e registrati <a href=ibbaMattia/view/login/register.php>QUI</a>, è facile!</h4>
 <?php
+}
 }
