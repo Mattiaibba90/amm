@@ -4,6 +4,10 @@ switch ($pageContent->getSubPage()) {
     case 'carrello':
         include 'carrello.php';
         break;
+    
+    case 'risultatiRicercaAvanzata':
+        include 'risultatiRicercaAvanzata.php';
+        break;
 
     case 'cronologiaOrdini':
         include 'cronologiaOrdini.php';
@@ -16,11 +20,10 @@ switch ($pageContent->getSubPage()) {
     case 'ricaricaCredito':
         include 'ricaricaCredito.php';
         break;
-        
+    
     case 'pannelloControllo':
         include 'pannelloControllo.php';
         break;
-
 
     default: ?>
             <ul>
