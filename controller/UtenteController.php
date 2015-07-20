@@ -45,6 +45,14 @@ class UtenteController extends Controller {
                         $pageContent->setSubPage('carrello');
                         break;
                     
+                    case 'ricercaAvanzata':
+                        $pageContent->setSubPage('ricercaAvanzata');
+                        break;
+                    
+                    case 'risultatiRicercaAvanzata':
+                        $pageContent->setSubPage('risultatiRicercaAvanzata');
+                        break; 
+                    
                     //ordini precedenti
                     case 'ordiniPrecedenti':
                         $mysqli = new mysqli();
@@ -129,8 +137,8 @@ class UtenteController extends Controller {
                         break;
 
                     //pannello di controllo utente
-                    case 'pannelloControlloUtente':
-                        $pageContent->setSubPage('pannelloControlloUtente');
+                    case 'pannelloControllo':
+                        $pageContent->setSubPage('pannelloControllo');
                         break;
                     
                     //ricarica carta di credito
@@ -198,8 +206,23 @@ class UtenteController extends Controller {
                         $this->logout($pageContent);
                         break;
                     
+                    case 'ricerca_avanzata':
+                    $msg = array();
+                    $this->showLoginPage($vd);
+                    $risultati = $this->ricercaAvanzata($vd, $user, $request, $msg);
+                    $risultatiRicerca = $risultati['risultatiRicerca'];
+                    $ric_limiteSuperiore = $risultati['limiteSuperiore'];
+                    $ric_limiteInferiore = $risultati['limiteInferiore'];
+                    $ric_cursore = $risultati['cursore'];
+                    $parametriPost = $risultati['parametriPost'];
+                    if(count($risultatiRicerca) == 0)
+                        $msg[] = '<li>La ricerca non ha prodotto risultati</li>';
+                    $pageContent->setSubPage('risultatiRicercaAvanzata');
+                    $this->creaFeedbackUtente($msg, $vd, "Ricerca effettuata con successo!");
+                    break;
+                    
                     //aggiornamento informazioni dell'utente
-                    case 'pannelloControlloUtente':
+                    case 'pannelloControllo':
                         $validi=0;
                         $risposta = array();
                         if(isset($request['name'])){
@@ -372,7 +395,7 @@ class UtenteController extends Controller {
                 require basename(__DIR__) . '/../view/master.php';
                 break;
             case 1:
-                include_once basename(__DIR__) . '/../view/login/registrazione.php';
+                include_once basename(__DIR__) . '/../view/ajax/register.php';
                 break;
         }
     }
@@ -393,7 +416,6 @@ class UtenteController extends Controller {
         // controllo degli accessi
         switch ($user->getTipo()) {
 
-            // l'utente e' un cliente, consentiamo l'accesso
             case "registered_user":
                 return $_SESSION;
 
