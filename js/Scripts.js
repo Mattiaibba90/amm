@@ -108,11 +108,11 @@ $(document).ready(function(){
         $("#error_streetNumber").html(" ");
     }
 
-    $("#pannelloControlloUtente").click(function(){
+    $("#modificaDati").click(function(){
          $.ajax({
-             url: "utente/pannelloControlloUtente",
+             url: "utente/modificaDati",
              data:{
-               cmd: "pannelloControlloUtente",
+               cmd: "modificaDati",
                name: $('[name="name"]').val(),
                surname: $('[name="surname"]').val(),
                mail: $('[name="mail"]').val(),
@@ -126,14 +126,14 @@ $(document).ready(function(){
                  setErrorMod(data);
              },
              error : function(data, state){
-                 setConfirmModCliente();
+                 setConfirmModUtente();
              }
          })
     });
 
     $("#admin_registerUser").click(function(){
          $.ajax({
-             url: "admin/listUsers",
+             url: "admin/amministraUtenti",
              data:{
                cmd: "register",
                username: $('[name="username"]').val(),
