@@ -23,6 +23,15 @@ class Controller {
                     case 'registrazione':
                         $pageContent->setSubPage('registrazione');
                         break;
+                    
+                    case 'ricercaAvanzata':
+                        $pageContent->setSubPage('ricercaAvanzata');
+                        break;
+                    
+                    case 'risultatiRicercaAvanzata':
+                        $pageContent->setSubPage('risultatiRicercaAvanzata');
+                        break;                    
+                    
                     case 'mostraBijou':
                         $intId = filter_var($request['id_bijou'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                         if(isset($intId)){
@@ -107,6 +116,21 @@ class Controller {
                         $message[] = '<li>La ricerca non ha prodotto risultati</li>';
                     $pageContent->setSubPage('ricerca');
                     $this->creaFeedbackUtente($message, $pageContent, "Ricerca effettuata con successo!");
+                    break;
+                    
+                    case 'ricerca_avanzata':
+                    $msg = array();
+                    $this->showLoginPage($vd);
+                    $risultati = $this->ricercaAvanzata($vd, $user, $request, $msg);
+                    $risultatiRicerca = $risultati['risultatiRicerca'];
+                    $ric_limiteSuperiore = $risultati['limiteSuperiore'];
+                    $ric_limiteInferiore = $risultati['limiteInferiore'];
+                    $ric_cursore = $risultati['cursore'];
+                    $parametriPost = $risultati['parametriPost'];
+                    if(count($risultatiRicerca) == 0)
+                        $msg[] = '<li>La ricerca non ha prodotto risultati</li>';
+                    $pageContent->setSubPage('risultatiRicercaAvanzata');
+                    $this->creaFeedbackUtente($msg, $vd, "Ricerca effettuata con successo!");
                     break;
                     
                     case 'registrazione':
@@ -271,7 +295,7 @@ class Controller {
                 require basename(__DIR__) . '/../view/master.php';
                 break;
             case 1:
-                include_once basename(__DIR__) . '/../view/login/register.php';
+                include_once basename(__DIR__) . '/../view/ajax/register.php';
                 break;
         }
     }
@@ -546,6 +570,140 @@ class Controller {
         }
     }
     
+    protected function &ricercaAvanzata(&$vd, &$user, &$request, &$msg){
+        
+        $mysqli = new mysqli();
+        $mysqli->connect(Settings::$db_host, Settings::$db_user, Settings::$db_password, Settings::$db_name);
+        
+        if($mysqli->connect_errno != 0){
+            $idErrore = $mysqli->connect_errno;
+            $msg = $mysqli->connect_error;
+            error_log("Errore nella connessione al server $idErrore : $msg", 0);
+            $msg[] = '<li>Errore nella connessione al server</li>';
+        }
+        else{
+            $stmt = $mysqli->stmt_init();
+            $condizioni = "";
+            $tipi = "";
+            $numeroCondizioni = 0;
+            $parametri = array();
+            $parametriPost = "";
+             
+            if(isset($request['typeBijou']) && ($request['typeBijou'] != "")){
+                $parametri[] = $request['typeBijou'];
+                $parametriPost = $parametriPost . '&amp;typeBijou=' . urlencode($request['typeBijou']);
+                $condizioni = $condizioni . "bijoux.typeBijou=? ";
+                $tipi = $tipi . "s";
+                $numeroCondizioni++;
+            }  
+            
+            if($numeroCondizioni == 0){
+                $mysqli->close();
+                $msg[] = '<li>Non puoi effettuare la ricerca se non specifichi nulla!</li>';
+            }
+            else{
+                $query = "SELECT COUNT(distinct(bijoux.idBijou)) as numeroMaxRisultati FROM bijoux WHERE " . $condizioni;
+                $stmt->prepare($query);
+                $stmt->bind_param($tipi, $parametri[0]);                
+                $stmt->execute();
+                
+                if($stmt->errno > 0){
+                    error_log("Errore nell'esecuzione della query $stmt->errno : $stmt->error");
+                    $mysqli->close();
+                    $msg[] = '<li>Si e\' verificato un errore nella ricerca</li>';
+                }
+                else{
+                   $stmt->store_result();
+                   if($stmt->num_rows > 0){
+                        $stmt->bind_result($numeroMaxRisultati);
+                        $stmt->fetch();
+
+                        $intLimiteInferiore = filter_var($request['ric_limiteInferiore'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                        $intLimiteSuperiore = filter_var($request['ric_limiteSuperiore'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                        $intCursore = filter_var($request['ric_cursore'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                        if(isset($intLimiteInferiore) && isset($intLimiteSuperiore)){
+                            if(isset($intCursore)){
+                                if($intCursore == 0){
+                                    $limiteInferiore = $intLimiteInferiore - UtenteController::MAX_RIGHE_TABELLA;
+                                    $limiteSuperiore = $intLimiteSuperiore - UtenteController::MAX_RIGHE_TABELLA;
+                                }
+                                else{
+                                    $limiteInferiore = $intLimiteInferiore + UtenteController::MAX_RIGHE_TABELLA;
+                                    $limiteSuperiore = $intLimiteSuperiore + UtenteController::MAX_RIGHE_TABELLA;
+                                }
+                            }
+                            else{
+                                $limiteInferiore = $intLimiteInferiore + UtenteController::MAX_RIGHE_TABELLA;
+                                $limiteSuperiore = $intLimiteSuperiore + UtenteController::MAX_RIGHE_TABELLA;
+                            }
+                        }
+                        else{
+                            $limiteInferiore = 0;
+                            $limiteSuperiore = UtenteController::MAX_RIGHE_TABELLA;
+                        }
+                        if($limiteSuperiore < UtenteController::MAX_RIGHE_TABELLA)
+                            $limiteSuperiore = UtenteController::MAX_RIGHE_TABELLA;
+                        if($limiteInferiore < 0)
+                            $limiteInferiore = 0;
+                        if($limiteSuperiore > $numeroMaxRisultati)
+                            $limiteSuperiore = $numeroMaxRisultati;
+                        if($limiteInferiore > $numeroMaxRisultati)
+                            $limiteInferiore = $numeroMaxRisultati - UtenteController::MAX_RIGHE_TABELLA;
+                        if(($limiteSuperiore - $limiteInferiore) != UtenteController::MAX_RIGHE_TABELLA)
+                            $limiteInferiore = $limiteSuperiore - UtenteController::MAX_RIGHE_TABELLA;
+                        if($limiteInferiore < 0)
+                            $limiteInferiore = 0;
+                        $stmt = $mysqli->stmt_init();
+                        $query = "SELECT distinct(bijoux.idBijou), bijoux.nameBijou, bijoux.material, bijoux.typeBijou, bijoux.avaibility FROM bijoux WHERE " . $condizioni . "LIMIT ?,?";
+                        $stmt->prepare($query);
+                        
+                        $tipi = $tipi . "ii";
+                        $stmt->bind_param($tipi, $parametri[0], $limiteInferiore, $limiteSuperiore);
+                        
+                        $stmt->execute();
+                        if($stmt->errno > 0){
+                            error_log("Errore nell'esecuzione della query $stmt->errno : $stmt->error");
+                            $mysqli->close();
+                            $msg[] = '<li>Si e\' verificato un errore nella ricerca</li>';
+                        }
+                        else{
+                            $stmt->store_result();
+                            $stmt->bind_result($idBijou, $name_bijou, $material, $typeBijou, $avaibility);
+                            
+                            $risultatiRicerca = array();
+                            while($stmt->fetch()){
+                                $bijou = new Bijou($name_bijou, $material, $typeBijou, 0, 0, $avaibility);
+                                $bijou->setId($idBijou);
+                                $bijouGiaPresente = false;
+                                foreach($risultatiRicerca as $bijouTrovato){
+                                    if($bijouTrovato->getId() == $bijou->getId())
+                                        $bijouGiaPresente = true;
+                                }
+                                if(!$bijouGiaPresente)
+                                    $risultatiRicerca[] = $bijou;
+                           }//end while
+                            $mysqli->close();
+                            $return = array();
+                            $return['risultatiRicerca'] = $risultatiRicerca;
+                            $return['limiteInferiore'] = $limiteInferiore;
+                            $return['limiteSuperiore'] = $limiteSuperiore;
+                            $return['cursore'] = $intCursore;
+                            $return['parametriPost'] = $parametriPost;
+                            return $return;
+                        }//end else
+                   }
+                   else
+                        $msg[] = '<li>La ricerca non ha prodotto risultati</li>';
+                }
+            }
+        }
+    }    
+    
+    /**
+     * Consente di registrare un utente
+     * @param &$request
+     * @param &$message
+     */
     private function registraUtente(&$request, &$message){
         if (filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
             if(filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))){
