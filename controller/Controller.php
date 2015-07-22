@@ -407,10 +407,10 @@ class Controller {
     /**
      * Crea un messaggio di feedback per l'utente 
      */
-    protected function creaFeedbackUtente(&$message, $pageContent, $okMessage) {
+    protected function creaFeedbackUtente(&$msg, $pageContent, $okMessage) {
         if (count($message) > 0){
             $error = "Si sono verificati i seguenti errori \n<ul>\n";
-            foreach ($message as $message) {
+            foreach ($msg as $message) {
                 $error = $error . $message . "\n";
             }
             $error = $error . "\n</ul>\n";
