@@ -35,6 +35,51 @@ class AdminController extends Controller {
                     case 'risultatiRicercaAvanzata':
                         $pageContent->setSubPage('risultatiRicercaAvanzata');
                         break;   
+                        
+                    case 'mostraBijou':
+                        $intId = filter_var($request['id_bijou'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
+                        if(isset($intId)){
+                            $mysqli = new mysqli();
+                            $mysqli->connect(Settings::$db_host, Settings::$db_user, Settings::$db_password, Settings::$db_name);
+                            if($mysqli->connect_errno != 0){
+                                $idErrore = $mysqli->connect_errno;
+                                $messaggio = $mysqli->connect_error;
+                                error_log("Errore nella connessione al server $idErrore : $messaggio", 0);
+                                $message = array();
+                                $message[] = "<li>Errore nella connessione $messaggio</li>";
+                                $this->creaFeedbackUtente($message, $pageContent, "");
+                            }
+                            else{
+                                //non uso i prepared statments poichè l'id viene validato come intero rendendo impossibile l'sql injection
+                                $query = "SELECT name_bijou, material, typeBijou, st_price, act_price, avaibility from bijoux where id_bijou=$intId";
+                                $result = $mysqli->query($query);
+                                if($mysqli->errno > 0)
+                                    error_log("Errore nell'esecuzione della query $mysqli->errno : $mysqli->error");
+                                else{
+                                    if($result->num_rows > 0){
+                                        $bijoux = array();
+                                        while($row = $result->fetch_object()){
+                                            $bijou = new Bijou($row->name_bijou, $row->material, $row->type_bijou, $row->st_price, $row->act_price, $row->avaibility);
+                                            $bijou->setCode($intId);
+                                            $bijoux[] = $bijou;
+                                        }
+                                        $mysqli->close();
+                                        $pageContent->setSubPage('mostraBijou');
+                                    }
+                                    else{
+                                        $message = array();
+                                        $message[] = '<li>Non esiste questo bijou sul sito</li>';
+                                        $this->creaFeedbackUtente($message, $pageContent, "");
+                                    }
+                                }
+                            }
+                        }
+                        else{
+                            $message = array();
+                            $message[] = '<li>L\'id utilizzato deve essere un numero</li>';
+                            $this->creaFeedbackUtente($message, $pageContent, "");
+                        }
+                        break;    
                     
                     //pagina dove poter eseguire tutte le operazioni possibili sugli utenti
                     case 'amministraUtenti':
