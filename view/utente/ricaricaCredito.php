@@ -5,7 +5,7 @@
         <p>Circuito: <?= $user->getCreditCard(); ?></p>
         <p>Numero: <?= $user->getCreditCardNumber(); ?></p>
         <p>Credito: <?= $user->getCredit(); ?></p>
-        <form action="cliente/home" method="post">
+        <form action="utente/home" method="post">
 
             <br/>
                 <ul class="form_ul">
