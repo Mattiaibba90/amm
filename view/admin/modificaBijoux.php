@@ -30,5 +30,5 @@
                     <input type="text" required="required" name="actualPrice" id="actualPrice">
                 </li>
             </ul>
-        <p><button type="submit" name="cmd" value="vendiBijou">Conferma</button></p>
+        <p><button type="submit" name="cmd" value="modificaBijoux">Conferma</button></p>
     </form>
