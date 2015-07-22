@@ -3,19 +3,19 @@
             <h3>Pannello di controllo di <?php echo $user->getUsername(); ?></h3>
             <ul>
                 <li>
-                    <a href="utente/modificaDati?">Modifica dati personali</a>
+                    <a href="utente/modificaDati">Modifica dati personali</a>
                 </li>
                 <li>
-                    <a href="utente/ricaricaCredito?">Ricarica credito</a>
+                    <a href="utente/ricaricaCredito">Ricarica credito</a>
                 </li>
                 <li>
-                    <a href="utente/carrello?">Carrello</a>
+                    <a href="utente/carrello">Carrello</a>
                 </li>
                 <li>
-                    <a href="utente/cronologiaOrdini?">Cronologia ordini</a>
+                    <a href="utente/cronologiaOrdini">Cronologia ordini</a>
                 </li>
                 <li>
-                    <a href="utente/home?">Torna alla home</a>
+                    <a href="utente/home">Torna alla home</a>
                 </li>
                 <li>
                     <form method="post" action="utente/logout">
