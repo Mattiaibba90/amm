@@ -211,30 +211,6 @@ a:visited{
         color: white;
     }
 
-    #header:before, #footer:before {
-        left: 0;
-        border-width: 20px 0 0 20px;
-        content: "";
-        position: absolute;
-        display: block;
-        border-style: solid;
-        border-color: #e9a2b9 transparent transparent transparent;
-        margin-top: 110px;
-
-    }
-
-    #header:after, #footer:after {
-        right: 0;
-        border-width: 20px 20px 0px 0px;
-        content: "";
-        position: absolute;
-        display: block;
-        border-style: solid;
-        border-color: #e9a2b9 transparent transparent transparent;
-        margin-top: 110px;
-
-    }
-
 
     div#logo h1 {
         background-image: url('../images/logo.jpg');
