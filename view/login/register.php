@@ -41,9 +41,8 @@
                         </li>
                     </ul>
                     <br/>
-                </li>
-                <li>
-                    Indirizzo di fatturazione:
+                    <li>
+                        Indirizzo di fatturazione:
                     <br/>
                     <ul class="form_ul">
                         <li>
@@ -68,8 +67,6 @@
                         </li>
                     </ul>
                     <br/>
-                </li>
-            </ul>
-        <p><button id="submit-registration">Conferma Registrazione</button></p>
     </li>
 </ul>
+<p><button id="submit-registration">Conferma registrazione</button></p>
