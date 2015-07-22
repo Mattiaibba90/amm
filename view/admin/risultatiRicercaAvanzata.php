@@ -11,7 +11,7 @@
         <div class="clear"></div>
         <ul class="lista_visiva">
         <?php
-        echo '<li><a href="' . 'login?cmd=ricerca_avanzata' . $parametriPost . '&amp;ric_limiteInferiore=' . $ric_limiteInferiore . '&amp;ric_limiteSuperiore=' . $ric_limiteSuperiore . '&amp;ric_cursore=0' . '">Indietro</a></li>';
+        echo '<li><a href="' . 'admin?cmd=ricerca_avanzata' . $parametriPost . '&amp;ric_limiteInferiore=' . $ric_limiteInferiore . '&amp;ric_limiteSuperiore=' . $ric_limiteSuperiore . '&amp;ric_cursore=0' . '">Indietro</a></li>';
         echo '<li><a href="' . 'login?cmd=ricerca_avanzata' . $parametriPost . '&amp;ric_limiteInferiore=' . $ric_limiteInferiore . '&amp;ric_limiteSuperiore=' . $ric_limiteSuperiore . '&amp;ric_cursore=1' . '">Avanti</a></li>';
         echo '</ul>';
         }//end if ?>
