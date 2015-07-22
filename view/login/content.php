@@ -21,7 +21,7 @@ else
 <button type="submit">Login</button>
 </form>
 
-<h4>Altrimenti inserisci i dati e registrati <a href=ibbaMattia/view/login/register.php>QUI</a>, è facile!</h4>
+<h4>Altrimenti inserisci i dati e registrati <a href=ibbaMattia/view/index.php?page=login?subPage=register>QUI</a>, è facile!</h4>
 <?php
 }
 }
