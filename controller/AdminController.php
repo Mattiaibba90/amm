@@ -337,12 +337,12 @@ class AdminController extends Controller {
             // gestione dei comandi inviati dall'amministratore
             if (isset($request["cmd"])) {
                 switch ($request["cmd"]) {
-                    // logout
+
                     case 'logout':
                         $this->logout($pageContent);
                         break;
                     
-                    case 'ricerca':
+                    /*case 'ricerca':
                         $message = array();
                         $this->showHomeAdmin($pageContent);
                         $risultati = $this->ricerca($pageContent, $user, $request, $message);
@@ -355,7 +355,7 @@ class AdminController extends Controller {
                             $message[] = '<li>La ricerca non ha prodotto risultati</li>';
                         $pageContent->setSubPage('ricerca');
                         $this->creaFeedbackUtente($message, $pageContent, "Ricerca effettuata con successo!");
-                    break;
+                    break;*/
                     
                     case 'ricerca_avanzata':
                     $msg = array();
@@ -372,199 +372,185 @@ class AdminController extends Controller {
                     $this->creaFeedbackUtente($msg, $pageContent, "Ricerca effettuata con successo!");
                     break;
                     
-                    //aggiornamento informazioni dell'utente
                     case 'modificaUtenti':
-
-                        $message = array();
-                        $this->modificaUtente($user, $request, $message);
-                        $this->creaFeedbackUtente($message, $pageContent, "Informazioni dell'utente aggiornate con successo!");
-                        $this->showHomeUtente($pageContent);
-                        break;
+                    $message = array();
+                    $this->modificaUtente($user, $request, $message);
+                    $this->creaFeedbackUtente($message, $pageContent, "Informazioni dell'utente aggiornate con successo!");
+                    $this->showHomeUtente($pageContent);
+                    break;
                     
-                    //registrazione di un nuovo utente
                     case 'registrazione':
-                        
-                        $validi=0;
-                        $answer = array();
-                        if(isset($request['username'])){
-                            if (!filter_var($request['username'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z0-9]{5,10}/')))) {
-                                $ajaxItem = new ajaxItem('username');
-                                $ajaxItem->setMessage('L\'username non e\' valido, inserisci un username con lunghezza compresa fra 5 e 10 caratteri (non simboli)');
-                                $answer['username'] = $ajaxItem;
-                            }
-                            elseif($this->usernameDisponibile($request['username']) == 1){
-                                $validi++;
-                            }
-                            elseif($this->usernameDisponibile($request['username']) == 0){
-                                $ajaxItem = new ajaxItem('username');
-                                $ajaxItem->setMessage('Questo username non e\' disponibile, scegline un altro');
-                                $answer['username'] = $ajaxItem;
-                            }
-                            elseif($this->usernameDisponibile($request['username']) == -1){
-                                $ajaxItem = new AjaxItem('username');
-                                $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
-                                $answer['username'] = $ajaxItem;
-                            }
-                            
+                    $validi=0;
+                    $answer = array();
+                    if(isset($request['username'])){
+                        if (!filter_var($request['username'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z0-9]{5,10}/')))) {
+                            $ajaxItem = new ajaxItem('username');
+                            $ajaxItem->setMessage('L\'username non e\' valido, inserisci un username con lunghezza compresa fra 5 e 10 caratteri (non simboli)');
+                            $answer['username'] = $ajaxItem;
                         }
-                        if(isset($request['password'])){
-                            if (!filter_var($request['password'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z0-9]{7,14}/')))) {
-                                $ajaxItem = new AjaxItem('password');
-                                $ajaxItem->setMessage('La password non e\' valida, inserisci una password con lunghezza compresa fra 7 e 14 caratteri (non simboli)');
-                                $answer['password'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
+                        elseif($this->usernameDisponibile($request['username']) == 1){
+                            $validi++;
                         }
-                        if(isset($request['name'])){
-                            if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $ajaxItem = new AjaxItem('name');
-                                $ajaxItem->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
-                                $answer['name'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
+                        elseif($this->usernameDisponibile($request['username']) == 0){
+                            $ajaxItem = new ajaxItem('username');
+                            $ajaxItem->setMessage('Questo username non e\' disponibile, scegline un altro');
+                            $answer['username'] = $ajaxItem;
                         }
-                        if(isset($request['surname'])){
-                            if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $ajaxItem = new AjaxItem('surname');
-                                $ajaxItem->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
-                                $answer['surname'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
-                            
-                        }
-                        if(isset($request['mail'])){
-                            if (!filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
-                                $ajaxItem = new AjaxItem('mail');
-                                $ajaxItem->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
-                                $answer['mail'] = $ajaxItem;
-                            }
-                            elseif($this->emailDisponibileUtente($request['mail']) == 1){
-                                $validi++;
-                            }
-                            elseif($this->emailDisponibileUtente($request['mail']) == 0){
-                                $ajaxItem = new AjaxItem('mail');
-                                $ajaxItem->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
-                                $answer['mail'] = $ajaxItem;
-                            }
-                            elseif($this->emailDisponibileUtente($request['mail']) == -1){
-                                $ajaxItem = new AjaxItem('mail');
-                                $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
-                                $answer['mail'] = $ajaxItem;
-                            }
-                               
-                        }
-                        if(isset($request['creditCard'])){
-                            if (!filter_var($request['creditCard'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,15}/')))) {
-                                $ajaxItem = new AjaxItem('creditCard');
-                                $ajaxItem->setMessage('Inserisci una marca con lunghezza compresa fra 5 e 15 lettere');
-                                $answer['creditCard'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
-                        }
-                        if(isset($request['creditCardNumber'])){
-                            if (!filter_var($request['creditCardNumber'], FILTER_VALIDATE_INT)) {
-                                $ajaxItem = new AjaxItem('creditCardNumber');
-                                $ajaxItem->setMessage('Il numero della carta di credito non e\' valido');
-                                $answer['creditCardNumber'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
-                        }
-                        if(isset($request['city'])){
-                            if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
-                                $ajaxItem = new AjaxItem('city');
-                                $ajaxItem->setMessage('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
-                                $answer['city'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
-                        }
-                        if(isset($request['cap'])){
-                            if (!filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))) {
-                                $ajaxItem = new AjaxItem('cap');
-                                $ajaxItem->setMessage('Il cap non e\' valido, inserisci una cap corretto');
-                                $answer['cap'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
-                        }
-                        if(isset($request['street'])){
-                            if (!filter_var($request['street'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
-                                $ajaxItem = new AjaxItem('street');
-                                $ajaxItem->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
-                                $answer['street'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
-                        }
-                        if(isset($request['streetNumber'])){
-                            if (!filter_var($request['streetNumber'], FILTER_VALIDATE_INT)) {
-                                $ajaxItem = new AjaxItem('streetNumber');
-                                $ajaxItem->setMessage('Il numero civico non puo\' contenere lettere');
-                                $answer['streetNumber'] = $ajaxItem;
-                            }
-                            else
-                                $validi++;
+                        elseif($this->usernameDisponibile($request['username']) == -1){
+                            $ajaxItem = new AjaxItem('username');
+                            $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
+                            $answer['username'] = $ajaxItem;
                         }
                         
-                        if($validi == 11){
-                            $message = array();
-                            $this->registraUtente($request, $message);
-                            $this->creaFeedbackUtente($message, $pageContent, "Utente registrato con successo!");
-                            $this->creaFeedbackUtente($message, $pageContent, "Puoi gia' da ora accedere con le tue credenziali");
-                            $this->showLoginPage($pageContent);
+                    }
+                    if(isset($request['password'])){
+                    if (!filter_var($request['password'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z0-9]{7,14}/')))) {
+                            $ajaxItem = new AjaxItem('password');
+                            $ajaxItem->setMessage('La password non e\' valida, inserisci una password con lunghezza compresa fra 7 e 14 caratteri (non simboli)');
+                            $answer['password'] = $ajaxItem;
                         }
                         else
-                            $ajaxMode=1;
+                            $validi++;
+                    }
+                    if(isset($request['name'])){
+                        if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                            $ajaxItem = new AjaxItem('name');
+                            $ajaxItem->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
+                            $answer['name'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
+                    if(isset($request['surname'])){
+                        if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
+                            $ajaxItem = new AjaxItem('surname');
+                            $ajaxItem->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
+                            $answer['surname'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
                         
-                        break;
+                    }
+                    if(isset($request['mail'])){
+                        if (!filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
+                            $ajaxItem = new AjaxItem('mail');
+                            $ajaxItem->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
+                            $answer['mail'] = $ajaxItem;
+                        }
+                        elseif($this->emailDisponibileUtente($request['mail']) == 1){
+                            $validi++;
+                        }
+                        elseif($this->emailDisponibileUtente($request['mail']) == 0){
+                            $ajaxItem = new AjaxItem('mail');
+                            $ajaxItem->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
+                            $answer['mail'] = $ajaxItem;
+                        }
+                        elseif($this->emailDisponibileUtente($request['mail']) == -1){
+                            $ajaxItem = new AjaxItem('mail');
+                            $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
+                            $answer['mail'] = $ajaxItem;
+                        }
+                           
+                    }
+                    if(isset($request['creditCard'])){
+                        if (!filter_var($request['creditCard'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,15}/')))) {
+                            $ajaxItem = new AjaxItem('creditCard');
+                            $ajaxItem->setMessage('Inserisci una marca con lunghezza compresa fra 5 e 15 lettere');
+                            $answer['creditCard'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
+                    if(isset($request['creditCardNumber'])){
+                        if (!filter_var($request['creditCardNumber'], FILTER_VALIDATE_INT)) {
+                            $ajaxItem = new AjaxItem('creditCardNumber');
+                            $ajaxItem->setMessage('Il numero della carta di credito non e\' valido');
+                            $answer['creditCardNumber'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
+                    if(isset($request['city'])){
+                        if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
+                            $ajaxItem = new AjaxItem('city');
+                            $ajaxItem->setMessage('La citta\' non e\' valida, inserisci una citta\' con lunghezza compresa fra 3 e 15 lettere');
+                            $answer['city'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
+                    if(isset($request['cap'])){
+                        if (!filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))) {
+                            $ajaxItem = new AjaxItem('cap');
+                            $ajaxItem->setMessage('Il cap non e\' valido, inserisci una cap corretto');
+                            $answer['cap'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
+                    if(isset($request['street'])){
+                        if (!filter_var($request['street'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
+                            $ajaxItem = new AjaxItem('street');
+                            $ajaxItem->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
+                            $answer['street'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
+                    if(isset($request['streetNumber'])){
+                        if (!filter_var($request['streetNumber'], FILTER_VALIDATE_INT)) {
+                            $ajaxItem = new AjaxItem('streetNumber');
+                            $ajaxItem->setMessage('Il numero civico non puo\' contenere lettere');
+                            $answer['streetNumber'] = $ajaxItem;
+                        }
+                        else
+                            $validi++;
+                    }
                     
+                    if($validi == 11){
+                        $message = array();
+                        $this->registraUtente($request, $message);
+                        $this->creaFeedbackUtente($message, $pageContent, "Utente registrato con successo!");
+                        $this->creaFeedbackUtente($message, $pageContent, "Puoi gia' da ora accedere con le tue credenziali");
+                        $this->showLoginPage($pageContent);
+                    }
+                    else
+                        $ajaxMode=1;
+                    
+                    break;
                     
                     //messa in vendita di un bijou
                     case 'amministraBijoux':
-
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
-                        $message = array();
-                        $this->vendiBijou($user, $request, $message);
-                        $this->creaFeedbackUtente($message, $pageContent, "Bijou posto in vendita con successo!");
-                        $this->showHomeUtente($pageContent);
-                        break;
+                    $message = array();
+                    $this->vendiBijou($user, $request, $message);
+                    $this->creaFeedbackUtente($message, $pageContent, "Bijou posto in vendita con successo!");
+                    $this->showHomeUtente($pageContent);
+                    break;
                     
                     //modifica di un bijou già caricato
                     case 'modificaBijoux':
-
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
-                        $message = array();
-                        $this->modificaBijou($user, $request, $message);
-                        $this->creaFeedbackUtente($message, $pageContent, "Informazioni del bijou modificate con successo!");
-                        $this->showHomeUtente($pageContent);
-                        break;
+                    $message = array();
+                    $this->modificaBijou($user, $request, $message);
+                    $this->creaFeedbackUtente($message, $pageContent, "Informazioni del bijou modificate con successo!");
+                    $this->showHomeUtente($pageContent);
+                    break;
                     
                     //ricarica della carta di credito dell'utente selezionato
                     case 'ricaricaUtenti':
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
-                        $message = array();
-                        $this->ricaricaUtente($user, $request, $message);
-                        $this->creaFeedbackUtente($message, $pageContent, "Credito ricaricato con successo!");
-                        $this->showHomeUtente($pageContent);
-                        break;
+                    $message = array();
+                    $this->ricaricaUtente($user, $request, $message);
+                    $this->creaFeedbackUtente($message, $pageContent, "Credito ricaricato con successo!");
+                    $this->showHomeUtente($pageContent);
+                    break;
                     
                     default : $this->showHomeUtente($pageContent);
                 }
             } 
             else{
-                // nessun comando
                 $user = $session['user'];
                 $ultimiArrivi = Controller::loadUltimiArrivi();
                 $this->showHomeUtente($pageContent);
-            }//end else
+            }
         }
 
         switch($ajaxMode){
@@ -576,20 +562,13 @@ class AdminController extends Controller {
                 break;
         }
     }
-    /**
-     * Restituisce l'array contentente la sessione per l'utente corrente
-     * @return array
-     */
+
     public function &getSessione(&$request) {
         if (!isset($_SESSION) || !array_key_exists('user', $_SESSION)) {
-            // la sessione deve essere inizializzata
             return null;
         }
 
-        // verifico chi sia l'utente correntemente autenticato
         $user = $_SESSION['user'];
-
-        // controllo degli accessi
         switch ($user->getTipo()) {
             // l'utente e' un admin, consentiamo l'accesso
             case 'admin':
