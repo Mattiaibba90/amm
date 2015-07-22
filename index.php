@@ -13,7 +13,6 @@ class MainController {
     public static function dispatch(&$request) {
         //inizializzazione della sessione
         session_start();
-        //$request["page"] = 'login';
         if(isset($request["page"])) {
             switch ($request["page"]) {
                 case "login":
@@ -27,6 +26,7 @@ class MainController {
                     $controller = new UtenteController();
                     $sessione = &$controller->getSessione($request);
                     
+                    // forbidden access
                     if (!isset($sessione)) {
                         self::write403();
                     }
@@ -78,6 +78,5 @@ class MainController {
     }
 
 }
-
 
 ?>
