@@ -1,11 +1,12 @@
 <ul>
     <li>
         <h3>Ricarica il tuo credito</h3>
+        <h4>Dati attuali</h4><br/>
         <p>Circuito: <?= $user->getCreditCard(); ?></p>
         <p>Numero: <?= $user->getCreditCardNumber(); ?></p>
         <p>Credito: <?= $user->getCredit(); ?></p>
         <form action="cliente/home" method="post">
-            Per effettuare una ricarica <strong>compilatutti i campi</strong>
+
             <br/>
                 <ul class="form_ul">
                     <li>
@@ -22,7 +23,7 @@
                     </li>
                 </ul>
             <br/>
-        <p><button type="submit" name="cmd" value="ricaricaCredito">Conferma Ricarica</button></p>
+        <button type="submit" name="cmd" value="ricaricaCredito">Conferma ricarica</button>
         </form>
     </li>
 </ul>
