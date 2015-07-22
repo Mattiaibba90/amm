@@ -18,22 +18,13 @@ class AdminController extends Controller {
         $pageContent->setPage($request['page']);
         $ajaxMode = 0;
 
-        // gestion dei comandi
-        // tutte le variabili che vengono create senza essere utilizzate 
-        // direttamente in questo switch, sono quelle che vengono poi lette
-        // dalla vista, ed utilizzano le classi del modello
         if (!$this->loggedIn()) {
             //l'utente non e' autenticato, viene rimandato alla home
             $this->showLoginPage($pageContent);
-        }//end if 
+        }
         else{
             $user = $session['user'];
             
-            // verifico quale sia la sottopagina da servire ed imposto 
-            // il descrittore della vista per caricare i "pezzi" delle pagine corretti
-            // tutte le variabili che vengono create senza essere utilizzate 
-            // direttamente in questo switch, sono quelle che vengono poi lette
-            // dalla vista, ed utilizzano le classi del modello
             if (isset($request["subpage"])) {
                 switch ($request["subpage"]) {
                     
@@ -124,7 +115,7 @@ class AdminController extends Controller {
                                     $this->creaFeedbackUtente($message, $pageContent, "");
                                 }
                             }
-                        }//end else errore connessione
+                        }
                     break;
                     
                     case 'modificaUtenti':
@@ -247,7 +238,7 @@ class AdminController extends Controller {
                                     $this->creaFeedbackUtente($message, $pageContent, "");
                                 }
                             }
-                        }//end else errore connessione
+                        }
                     break;
                     
                     case 'modificaBijoux':
@@ -601,7 +592,7 @@ class AdminController extends Controller {
         // controllo degli accessi
         switch ($user->getTipo()) {
             // l'utente e' un admin, consentiamo l'accesso
-            case Utente::FLAG_ADMIN:
+            case 'admin':
                 return $_SESSION;
 
             default:
@@ -609,9 +600,6 @@ class AdminController extends Controller {
         }
     }
     
-    /**
-     * Consente di modificare un cliente
-     */
     private function modificaUtente(&$user, &$request, &$message){
         if (filter_var($request['mail_mod'], FILTER_VALIDATE_EMAIL)) {
             if(filter_var($request['cap_mod'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))){
@@ -637,9 +625,6 @@ class AdminController extends Controller {
         
     }
     
-/**
-     * Consente di registrare un cliente
-     */
 private function registraUtente(&$request, &$message){
         if (filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
             if(filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))){
@@ -704,10 +689,6 @@ private function registraUtente(&$request, &$message){
             $message[] = '<li>L\'email specificata non &egrave; nel formato corretto</li>';
     }
 
-    
-     /**
-     * Messa in vendita di un bijou
-     */
     private function vendiBijou(&$user, &$request, &$message){
        $intIdBijou = filter_var($request['id_bijou'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
         if(isset($intIdBijou)){
@@ -803,9 +784,6 @@ private function registraUtente(&$request, &$message){
         }
     }
     
-     /**
-     * Consente di modificare un bijou già esistente
-     */
     private function modificaBijou(&$user, &$request, &$message){
        $intIdBijou = filter_var($request['id_bijou'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
        if(isset($intIdBijou)){
