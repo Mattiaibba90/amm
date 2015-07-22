@@ -1,16 +1,12 @@
 <?php
-if($pageContent->getSubPage()=='register')
-{
-        include 'register.php';
-}
-else
-{
-    if($pageContent->getSubPage()=='risultatiRicercaAvanzata')
-    {
-        include 'risultatiRicercaAvanzata.php';
-    }
-    else
-{
+switch($pageContent->getSubPage()){
+        case 'register':
+                include 'register.php';
+                break;
+        case 'risultatiRicercaAvanzata':
+                include 'risultatiRicercaAvanzata.php';
+                break;
+        default:
 ?>
 <h4>Sei tornato? Accedi qui</h4><br><br>
 
@@ -23,5 +19,4 @@ else
 
 <h4>Altrimenti inserisci i dati e registrati <a href=register>QUI</a>, è facile!</h4>
 <?php
-}
 }
