@@ -3,5 +3,5 @@
 </ul>
 
 <div id="menu">
-    <a href="pannelloControllo.php">Pannello di controllo</a>
+    <a href="pannelloControllo">Pannello di controllo</a>
 </div>
