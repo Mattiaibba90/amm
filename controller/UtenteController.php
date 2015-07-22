@@ -15,32 +15,19 @@ class UtenteController extends Controller {
 
     public function handleInput(&$request, &$session) {
 
-        // creo il descrittore della vista
         $pageContent = new PageContent();
 
-        // imposto la pagina
         $pageContent->setPage($request['page']);
         $ajaxMode=0;
 
-        // gestion dei comandi
-        // tutte le variabili che vengono create senza essere utilizzate 
-        // direttamente in questo switch, sono quelle che vengono poi lette
-        // dalla vista, ed utilizzano le classi del modello
         if (!$this->loggedIn()) {
-            //l'utente non e' autenticato, viene rimandato alla home
             $this->showLoginPage($pageContent);
         }
         else{
             $user = $session['user'];
-            
-            // verifico quale sia la sottopagina da servire ed imposto 
-            // il descrittore della vista per caricare i "pezzi" delle pagine corretti
-            // tutte le variabili che vengono create senza essere utilizzate 
-            // direttamente in questo switch, sono quelle che vengono poi lette
-            // dalla vista, ed utilizzano le classi del modello
             if (isset($request["subpage"])) {
                 switch ($request["subpage"]) {                    
-                    //carrello
+
                     case 'carrello':
                         $pageContent->setSubPage('carrello');
                         break;
@@ -53,7 +40,6 @@ class UtenteController extends Controller {
                         $pageContent->setSubPage('risultatiRicercaAvanzata');
                         break; 
                     
-                    //ordini precedenti
                     case 'ordiniPrecedenti':
                         $mysqli = new mysqli();
                         $mysqli->connect(Settings::$db_host, Settings::$db_user, Settings::$db_password, Settings::$db_name);
@@ -75,8 +61,6 @@ class UtenteController extends Controller {
                             else{
                                 $row = $result->fetch_object();
                                 $numeroMaxRisultati = $row->numeroRisultati;
-                                //validando l'imput dell'utente esso diventa per forza un numero o non si procede con la query
-                                //ciò mi consente di non usare i prepared statments dato che non è possibile effettuare qui SQLInjections
                                 $intLimiteInferiore = filter_var($request['limiteInferiore'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                                 $intLimiteSuperiore = filter_var($request['limiteSuperiore'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                                 $intCursore = filter_var($request['cursore'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -136,12 +120,10 @@ class UtenteController extends Controller {
                         }
                         break;
 
-                    //pannello di controllo utente
                     case 'pannelloControllo':
                         $pageContent->setSubPage('pannelloControllo');
                         break;
                     
-                    //ricarica carta di credito
                     case 'ricaricaCredito':
                         $pageContent->setSubPage('ricaricaCredito');
                         break;
@@ -198,7 +180,6 @@ class UtenteController extends Controller {
                 }
             }
             
-            // gestione dei comandi inviati dall'utente
             if (isset($request["cmd"])) {
                 switch ($request["cmd"]) {
                     // logout
@@ -221,24 +202,23 @@ class UtenteController extends Controller {
                     $this->creaFeedbackUtente($msg, $pageContent, "Ricerca effettuata con successo!");
                     break;
                     
-                    //aggiornamento informazioni dell'utente
                     case 'pannelloControllo':
                         $validi=0;
                         $risposta = array();
                         if(isset($request['name'])){
                             if (!filter_var($request['name'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $oggettoAjax = new OggettoAjax('name');
-                                $oggettoAjax->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
-                                $risposta['name'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('name');
+                                $ajaxItem->setMessage('Il nome non e\' valido, inserisci un nome con lunghezza compresa fra 3 e 10 lettere');
+                                $risposta['name'] = $AjaxItem;
                             }
                             else
                                 $validi++;
                         }
                         if(isset($request['surname'])){
                             if (!filter_var($request['surname'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,10}/')))) {
-                                $oggettoAjax = new OggettoAjax('surname');
-                                $oggettoAjax->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
-                                $risposta['surname'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('surname');
+                                $ajaxItem->setMessage('Il cognome non e\' valido, inserisci un cognome con lunghezza compresa fra 3 e 10 lettere');
+                                $risposta['surname'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -246,57 +226,57 @@ class UtenteController extends Controller {
                         }
                         if(isset($request['mail'])){
                             if (!filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
-                                $oggettoAjax = new OggettoAjax('mail');
-                                $oggettoAjax->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
-                                $risposta['mail'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('mail');
+                                $ajaxItem->setMessage('L\'indirizzo e-mail utilizzato non e\' valido');
+                                $risposta['mail'] = $ajaxItem;
                             }
                             elseif($this->emailDisponibileUtente($request['mail'], $user->getId()) == 1){
                                 $validi++;
                             }
                             elseif($this->emailDisponibileUtente($request['mail'], $user->getId()) == 0){
-                                $oggettoAjax = new OggettoAjax('mail');
-                                $oggettoAjax->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
-                                $risposta['mail'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('mail');
+                                $ajaxItem->setMessage('L\'indirizzo e-mail scelto non e\' disponibile, scegline un altro');
+                                $risposta['mail'] = $ajaxItem;
                             }
                             elseif($this->emailDisponibileUtente($request['mail'], $user->getId()) == -1){
-                                $oggettoAjax = new OggettoAjax('mail');
-                                $oggettoAjax->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
-                                $risposta['mail'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('mail');
+                                $ajaxItem->setMessage('Si e\' verificato un errore durante l\'operazione, si prega di riprovare');
+                                $risposta['mail'] = $ajaxItem;
                             }
                                
                         }
                         if(isset($request['city'])){
                             if (!filter_var($request['city'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{3,15}/')))) {
-                                $oggettoAjax = new OggettoAjax('city');
-                                $oggettoAjax->setMessage('La città\' non e\' valida, inserisci una città\' con lunghezza compresa fra 3 e 15 lettere');
-                                $risposta['city'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('city');
+                                $ajaxItem->setMessage('La città\' non e\' valida, inserisci una città\' con lunghezza compresa fra 3 e 15 lettere');
+                                $risposta['city'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
                         if(isset($request['cap'])){
                             if (!filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))) {
-                                $oggettoAjax = new OggettoAjax('cap');
-                                $oggettoAjax->setMessage('Il cap non e\' valido, inserisci una cap corretto');
-                                $risposta['cap'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('cap');
+                                $ajaxItem->setMessage('Il cap non e\' valido, inserisci una cap corretto');
+                                $risposta['cap'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
                         if(isset($request['street'])){
                             if (!filter_var($request['street'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[a-zA-Z]{5,20}/')))) {
-                                $oggettoAjax = new OggettoAjax('street');
-                                $oggettoAjax->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
-                                $risposta['street'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('street');
+                                $ajaxItem->setMessage('La via non e\' valida, inserisci una via con lunghezza compresa fra 5 e 20 lettere');
+                                $risposta['street'] = $ajaxItem;
                             }
                             else
                                 $validi++;
                         }
                         if(isset($request['streetNumber'])){
                             if (!filter_var($request['streetNumber'], FILTER_VALIDATE_INT)) {
-                                $oggettoAjax = new OggettoAjax('streetNumber');
-                                $oggettoAjax->setMessage('Il numero civico non puo\' contenere lettere');
-                                $risposta['streetNumber'] = $oggettoAjax;
+                                $ajaxItem = new AjaxItem('streetNumber');
+                                $ajaxItem->setMessage('Il numero civico non puo\' contenere lettere');
+                                $risposta['streetNumber'] = $ajaxItem;
                             }
                             else
                                 $validi++;
@@ -313,30 +293,21 @@ class UtenteController extends Controller {
                         
                         break;
 
-                    //ricarica della carta di credito dell'utente
                     case 'ricaricaCredito':
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
                         $message = array();
                         $this->ricaricaCredito($user, $request, $message);
                         $this->creaFeedbackUtente($message, $pageContent, "Credito ricaricato con successo!");
                         $this->showHomeUtente($pageContent);
                         break;
 
-                    //aggiunta oggetto al carrello
                     case 'carrello':
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
                         $message = array();
                         $this->carrello($user, $request, $message);
                         $this->creaFeedbackUtente($message, $pageContent, "Bijou inserito correttamente nel Carrello!");
                         $this->showHomeUtente($pageContent);
                         break;
                     
-                    //rimozione elemento dal carrello
                     case 'rimuoviElementoCarrello':
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
                         $message = array();
                         $intPos = filter_var($request['pos'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                         if(isset($intPos)){
@@ -354,17 +325,14 @@ class UtenteController extends Controller {
                         $this->showHomeUtente($pageContent);
                         break;
                     
-                    //conferma evasione dell'ordine
                     case 'confermaOrdine':
-                        // in questo array inserisco i messaggi di 
-                        // cio' che non viene validato
                         $message = array();
                         $this->confermaOrdine($user, $request, $message);
-                        $this->creaFeedbackUtente($message, $pageContent, "Ordine confermato Correttamente!");
+                        $this->creaFeedbackUtente($message, $pageContent, "Ordine confermato correttamente!");
                         $this->showHomeUtente($pageContent);
                         break;
                     
-                    case 'ricerca':
+                    /*case 'ricerca':
                         $message = array();
                         $this->showHomeUtente($pageContent);
                         $risultati = $this->ricerca($pageContent, $user, $request, $message);
@@ -377,7 +345,7 @@ class UtenteController extends Controller {
                             $message[] = '<li>La ricerca non ha prodotto risultati</li>';
                         $pageContent->setSubPage('ricerca');
                         $this->creaFeedbackUtente($message, $pageContent, "Ricerca effettuata con successo!");
-                    break;
+                    break;*/
                         
                     default : $this->showHomeUtente($pageContent);
                 }
@@ -400,20 +368,11 @@ class UtenteController extends Controller {
         }
     }
 
-    /**
-     * Restituisce l'array contentente la sessione per l'utente corrente
-     * @return array
-     */
     public function &getSessione(&$request) {
         if (!isset($_SESSION) || !array_key_exists('user', $_SESSION)) {
-            // la sessione deve essere inizializzata
             return null;
         }
-
-        // verifico chi sia l'utente correntemente autenticato
         $user = $_SESSION['user'];
-
-        // controllo degli accessi
         switch ($user->getTipo()) {
 
             case "registered_user":
@@ -424,9 +383,6 @@ class UtenteController extends Controller {
         }
     }
     
-    /**
-     * Consente di effettuare le operazioni del pannello di controllo
-     */
     private function pannelloControlloUtente(&$user, &$request, &$message){
         $validMail = filter_var($request['mail'], FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE);
         $validNumeroCivico = filter_var($request['streetNumber'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -495,9 +451,6 @@ class UtenteController extends Controller {
             $message[] = '<li>L\'e-mail, il CAP o il Numero Civico specificato non sono nel formato corretto</li>';
     }
     
-    /**
-     * Consente di effettuare le operazioni di ricarica del credito
-     */
     private function ricaricaCredito(&$user, &$request, &$message){
         $intImport = filter_var($request['importo_ricarica'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
         if(isset($intImport)) {
@@ -512,9 +465,6 @@ class UtenteController extends Controller {
             $message[] = '<li>L\'importo deve essere un numero</li>';
     }
     
-    /**
-     * Consente di effettuare le operazioni del carrello
-     */
     private function carrello(&$user, &$request, &$message){
         $intQuantita = filter_var($request['quantita'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
         $intDisponibilita = filter_var($request['avaibility'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
@@ -554,20 +504,17 @@ class UtenteController extends Controller {
                             }
                         }
                     }
-                }//end if controllo quantita eccessiva
+                }
                 else
                     $message[] = '<li>Non puoi acquistare una quantita\' di uno stesso bijou superiore alla sua disponibilita\' di vendita</li>';
-            }//end if controllo quantita negativa
+            }
             else
                 $message[] = '<li>Non puoi acquistare una quantita\' negativa o nulla di bijoux</li>';
-        }//end if controllo quantita di tipo intero
+        }
         else
             $message[] = '<li>La quantita\' o la disponibilita\' o il prezzo o l\'id del bijou digitati non sono validi</li>';
     }
     
-    /**
-     * Consente di confermare un ordine
-     */
     private function confermaOrdine(&$user, &$request, &$message){
         if($user->getCredit() >= $user->getTotal()){
             $contenutoCarrello = $user->getContenut();
