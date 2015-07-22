@@ -368,8 +368,8 @@ class AdminController extends Controller {
                     
                     case 'ricerca_avanzata':
                     $msg = array();
-                    $this->showLoginPage($vd);
-                    $risultati = $this->ricercaAvanzata($vd, $user, $request, $msg);
+                    $this->showLoginPage($pageContent);
+                    $risultati = $this->ricercaAvanzata($pageContent, $user, $request, $msg);
                     $risultatiRicerca = $risultati['risultatiRicerca'];
                     $ric_limiteSuperiore = $risultati['limiteSuperiore'];
                     $ric_limiteInferiore = $risultati['limiteInferiore'];
@@ -378,7 +378,7 @@ class AdminController extends Controller {
                     if(count($risultatiRicerca) == 0)
                         $msg[] = '<li>La ricerca non ha prodotto risultati</li>';
                     $pageContent->setSubPage('risultatiRicercaAvanzata');
-                    $this->creaFeedbackUtente($msg, $vd, "Ricerca effettuata con successo!");
+                    $this->creaFeedbackUtente($msg, $pageContent, "Ricerca effettuata con successo!");
                     break;
                     
                     //aggiornamento informazioni dell'utente
