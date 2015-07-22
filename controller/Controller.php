@@ -376,7 +376,7 @@ class Controller {
      */
     protected function login($pageContent, $username, $password) {
         //caricamento dati dell'utente
-        $user = Factory::loadUser($username, $password);
+        $user = Accounts::loadUser($username, $password);
         if (isset($user)) {
             // utente autenticato
             $_SESSION['user'] = $user;
