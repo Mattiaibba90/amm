@@ -32,7 +32,7 @@ class Controller {
                         $pageContent->setSubPage('risultatiRicercaAvanzata');
                         break;                    
                     
-                    case 'mostraBijou':
+                    /*case 'mostraBijou':
                         $intId = filter_var($request['id_bijou'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                         if(isset($intId)){
                             $mysqli = new mysqli();
@@ -75,17 +75,13 @@ class Controller {
                             $message[] = '<li>L\'id utilizzato deve essere un numero</li>';
                             $this->creaFeedbackUtente($message, $pageContent, "");
                         }
-                        break;
+                        break;*/
                     
                      default:
                          $pageContent->setSubPage('home');
                 }
         }
         
-        // gestione dei comandi
-        // tutte le variabili che vengono create senza essere utilizzate 
-        // direttamente in questo switch, sono quelle che vengono poi lette
-        // dalla vista, ed utilizzano le classi del modello
         
         if (isset($request["cmd"])) {
             switch ($request["cmd"]) {
@@ -99,11 +95,10 @@ class Controller {
                     else
                         $password = '';
                     $this->login($pageContent, $username, $password);
-                    // questa variabile viene poi utilizzata dalla vista
                     if ($this->loggedIn())
                         $user = $_SESSION['user'];
                     break;
-                case 'ricerca':
+                /*case 'ricerca':
                     $message = array();
                     $this->showLoginPage($pageContent);
                     $risultati = $this->ricerca($pageContent, $user, $request, $message);
@@ -116,7 +111,7 @@ class Controller {
                         $message[] = '<li>La ricerca non ha prodotto risultati</li>';
                     $pageContent->setSubPage('ricerca');
                     $this->creaFeedbackUtente($message, $pageContent, "Ricerca effettuata con successo!");
-                    break;
+                    break;*/
                     
                     case 'ricerca_avanzata':
                     $msg = array();
@@ -133,7 +128,7 @@ class Controller {
                     $this->creaFeedbackUtente($msg, $pageContent, "Ricerca effettuata con successo!");
                     break;
                     
-                    case 'registrazione':
+                    case 'register':
                         
                         $validi=0;
                         $answer = array();
@@ -279,11 +274,9 @@ class Controller {
         }
         else{
             if($this->loggedIn()) {
-                //utente autenticato
-                //questa variabile viene poi utilizzata dalla vista
                 $user = $_SESSION['user'];
                 $this->showHomeUtente($pageContent);
-            }//end if
+            }
             else{
                 $this->showLoginPage($pageContent);// utente non autenticato
             }
@@ -300,19 +293,10 @@ class Controller {
         }
     }
 
-    /**
-     * Restituisce l'array contentente la sessione per l'utente corrente
-     * @return array
-     */
     public function &getSessione() {
         return $_SESSION;
     }
 
-    /**
-     * Verifica se l'utente sia correttamente autenticato
-     * Restituisce true se l'utente e' gia' autenticato, false altrimenti
-     * @return boolean
-     */
     protected function loggedIn() {
         $autenticato = false;
         if(isset($_SESSION) && array_key_exists('user', $_SESSION))
@@ -320,10 +304,6 @@ class Controller {
         return $autenticato;
     }
 
-    /**
-     * Imposta la vista master.php per visualizzare la pagina di login
-     *
-     */
     protected function showLoginPage($pageContent) {
         //caricamento di tutti i singoli pezzi della pagina
         $pageContent->setTitle("I bijoux filati di Mimi");
@@ -332,10 +312,6 @@ class Controller {
         $pageContent->setContent(basename(__DIR__) . '/../view/login/content.php');
     }
 
-    /**
-     * Imposta la vista master.php per visualizzare l'home degli utenti
-     * 
-     */
     protected function showHomeUtente($pageContent) {
         //caricamento di tutti i singoli pezzi della pagina
         $pageContent->setTitle("I bijoux filati di Mimi");
@@ -344,9 +320,6 @@ class Controller {
         $pageContent->setContent(basename(__DIR__) . '/../view/utente/content.php');
     }
 
-     /**
-     * Imposta la vista master.php per visualizzare l'home dell'admin
-     */
     protected function showHomeAdmin($pageContent) {
         //caricamento di tutti i singoli pezzi della pagina
         $pageContent->setTitle("I bijoux filati di Mimi");
@@ -381,11 +354,11 @@ class Controller {
             // utente autenticato
             $_SESSION['user'] = $user;
             $this->showHomeUtente($pageContent);
-        }//end if
+        }
         else{
             $pageContent->setErrorMessage("Username o password errati");
             $this->showLoginPage($pageContent);
-        }//end else
+        }
     }
 
     /**
@@ -464,7 +437,7 @@ class Controller {
         }
     }
     
-    protected function &ricerca(&$pageContent, &$user, &$request, &$message){
+    /*protected function &ricerca(&$pageContent, &$user, &$request, &$message){
         
         $mysqli = new mysqli();
         $mysqli->connect(Settings::$db_host, Settings::$db_user, Settings::$db_password, Settings::$db_name);
@@ -568,9 +541,9 @@ class Controller {
                     $message[] = '<li>La ricerca non ha prodotto risultati</li>';
             }
         }
-    }
+    }*/
     
-    protected function &ricercaAvanzata(&$vd, &$user, &$request, &$msg){
+    protected function &ricercaAvanzata(&$pageContent, &$user, &$request, &$msg){
         
         $mysqli = new mysqli();
         $mysqli->connect(Settings::$db_host, Settings::$db_user, Settings::$db_password, Settings::$db_name);
@@ -699,11 +672,6 @@ class Controller {
         }
     }    
     
-    /**
-     * Consente di registrare un utente
-     * @param &$request
-     * @param &$message
-     */
     private function registraUtente(&$request, &$message){
         if (filter_var($request['mail'], FILTER_VALIDATE_EMAIL)) {
             if(filter_var($request['cap'], FILTER_VALIDATE_REGEXP, array('options' => array('regexp' => '/[0-9]{5}/')))){
@@ -752,18 +720,18 @@ class Controller {
                                         $mysqli->close();
                                     }
                                 }
-                            }//end else errore query
-                        }//end else errore connessione
-                    }//end controllo dati
+                            }
+                        }
+                    }
                     else
                         $message[] = '<li>Il numero della carta di credito non &egrave; nel formato corretto</li>';
-                }//end if numero civico
+                }
                 else
                     $message[] = '<li>Il numero civico non &egrave; nel formato corretto</li>';
-            }//end if cap
+            }
             else
                 $message[] = '<li>Il CAP specificato non &egrave; nel formato corretto</li>';
-        }//end if email
+        }
         else
             $message[] = '<li>L\'email specificata non &egrave; nel formato corretto</li>';
     }
