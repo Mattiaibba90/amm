@@ -21,7 +21,7 @@ include_once 'Settings.php';
             ?>
         </p>
         <?php if (isset($canLogin)) { ?>
-            <p>Puoi autenticarti nella seguente pagina di <a href="ibbaMattia/view/login">login</a></p>
+            <p>Puoi autenticarti nella seguente pagina di <a href="ibbaMattia/index/login">login</a></p>
         <?php    } ?>
     </body>
 </html>
