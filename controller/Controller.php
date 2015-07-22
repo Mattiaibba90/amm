@@ -408,7 +408,7 @@ class Controller {
      * Crea un messaggio di feedback per l'utente 
      */
     protected function creaFeedbackUtente(&$msg, $pageContent, $okMessage) {
-        if (count($message) > 0){
+        if (count($msg) > 0){
             $error = "Si sono verificati i seguenti errori \n<ul>\n";
             foreach ($msg as $message) {
                 $error = $error . $message . "\n";
@@ -590,7 +590,7 @@ class Controller {
             $parametriPost = "";
              
             if(isset($request['typeBijou']) && ($request['typeBijou'] != "")){
-                $parametri[] = $request['typeBijou'];
+                $parametri[] = "%" . $request['typeBijou'] . "%";
                 $parametriPost = $parametriPost . '&amp;typeBijou=' . urlencode($request['typeBijou']);
                 $condizioni = $condizioni . "bijoux.typeBijou=? ";
                 $tipi = $tipi . "s";
