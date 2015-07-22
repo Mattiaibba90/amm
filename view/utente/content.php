@@ -31,7 +31,7 @@ switch ($pageContent->getSubPage()) {
                     <ul class="lista_visiva">
                         <?php 
                             foreach ($ultimiArrivi as $ultimoArrivo) {
-                                echo '<li><a href="utente/bijou?id_bijou=' . $ultimoArrivo->getId() . '">' . $ultimoArrivo->getNameBijou() . '</a></li>';
+                                echo '<li><a href="utente/mostraBijou?id_bijou=' . $ultimoArrivo->getId() . '">' . $ultimoArrivo->getNameBijou() . '</a></li>';
                             }
                             ?>
                     </ul>
