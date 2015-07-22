@@ -4,7 +4,7 @@
         <h3>Modifica:</h3>
         <ul>
             <li>
-                Dati personali:
+                <h4>Dati personali:</h4>
                 <br/>
                     <ul class="form_ul">
                         <li>
@@ -54,6 +54,6 @@
                 <br/>
             </li>
         </ul>
-        <p><button id="pannelloControllo">Conferma i nuovi Dati</button></p>
+        <p><button id="pannelloControllo">Conferma i nuovi dati</button></p>
     </li>
 </ul>
