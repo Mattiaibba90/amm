@@ -32,7 +32,7 @@ class Controller {
                         $pageContent->setSubPage('risultatiRicercaAvanzata');
                         break;                    
                     
-                    /*case 'mostraBijou':
+                    case 'mostraBijou':
                         $intId = filter_var($request['id_bijou'], FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
                         if(isset($intId)){
                             $mysqli = new mysqli();
