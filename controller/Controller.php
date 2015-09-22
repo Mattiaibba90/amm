@@ -532,7 +532,7 @@ class Controller {
             else{
                 $query = "SELECT COUNT(distinct(bijoux.idBijou)) as numeroMaxRisultati FROM bijoux WHERE " . $condizioni;
                 $stmt->prepare($query);
-                $stmt->bind_param($tipi, $parametri[0]);                
+                $stmt->bind_param("s", $parametri[0]);                
                 $stmt->execute();
                 
                 if($stmt->errno > 0){
