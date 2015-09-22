@@ -53,21 +53,7 @@ class Controller {
                     if ($this->loggedIn())
                         $user = $_SESSION['user'];
                     break;
-                /*case 'ricerca':
-                    $message = array();
-                    $this->showLoginPage($pageContent);
-                    $risultati = $this->ricerca($pageContent, $user, $request, $message);
-                    $risultatiRicerca = $risultati['risultatiRicerca'];
-                    $ric_limiteSuperiore = $risultati['limiteSuperiore'];
-                    $ric_limiteInferiore = $risultati['limiteInferiore'];
-                    $ric_cursore = $risultati['cursore'];
-                    $pattern = urlencode($risultati['pattern']);
-                    if(count($risultatiRicerca) == 0)
-                        $message[] = '<li>La ricerca non ha prodotto risultati</li>';
-                    $pageContent->setSubPage('ricerca');
-                    $this->creaFeedbackUtente($message, $pageContent, "Ricerca effettuata con successo!");
-                    break;*/
-                    
+
                     case 'ricerca_avanzata':
                     $msg = array();
                     $this->showLoginPage($pageContent);
