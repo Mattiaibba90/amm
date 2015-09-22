@@ -39,7 +39,6 @@ class Accounts {
                     $return->setId($id);
                 } //se è un utente registrato                    
                 else{
-                    //$stmt = $mysqli->stmt_init();
                     $query = "SELECT * FROM admin WHERE username_admin=? AND password_admin=?";
                     $stmt->prepare($query);
                     $stmt->bind_param("ss", $username, $password);
