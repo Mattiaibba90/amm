@@ -51,6 +51,7 @@ class Accounts {
                         if($stmt->num_rows > 0){
                             $stmt->bind_result($id, $username, $password);
                             $stmt->fetch();
+                            echo mama?mamaluigi?;
                             $return = new Admin($username, $password);
                             $return->setId($id);
                         }//se è un admin
