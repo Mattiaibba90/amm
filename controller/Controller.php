@@ -415,7 +415,7 @@ class Controller {
             if(isset($request['typeBijou']) && ($request['typeBijou'] != "")){
                 $parametri[] = "%" . $request['typeBijou'] . "%";
                 $parametriPost = $parametriPost . '&amp;typeBijou=' . urlencode($request['typeBijou']);
-                $condizioni = $condizioni . "bijoux.typeBijou=? ";
+                $condizioni = $condizioni . "bijoux.typeBijou LIKE ? ";
                 $tipi = $tipi . "s";
                 $numeroCondizioni++;
             }  
