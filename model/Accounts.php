@@ -51,7 +51,7 @@ class Accounts {
                         if($stmt->num_rows > 0){
                             $stmt->bind_result($id, $username, $password);
                             $stmt->fetch();
-                            $return = new Admin($username, $password);
+                            $return = new Amministratore($username, $password);
                             $return->setId($id);
                         }//se è un admin
                     }
